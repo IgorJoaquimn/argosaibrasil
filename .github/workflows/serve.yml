@@ -1,0 +1,45 @@
+name: Development Server
+
+on:
+  workflow_dispatch:
+    inputs:
+      port:
+        description: 'Port to serve the application'
+        required: false
+        default: '3000'
+        type: string
+
+jobs:
+  serve:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Install serve globally
+      run: npm install -g serve
+      
+    - name: Serve application
+      run: |
+        echo "🚀 Starting server on port ${{ github.event.inputs.port || '3000' }}"
+        echo "📁 Serving from dist directory"
+        echo "🌐 Application will be available at: http://localhost:${{ github.event.inputs.port || '3000' }}/argosaibrasil/"
+        
+        # Serve the dist directory with proper SPA routing
+        serve -s dist -l ${{ github.event.inputs.port || '3000' }} --verbose
+        
+    # This job will run for 60 minutes max (GitHub Actions limit)
+    timeout-minutes: 60

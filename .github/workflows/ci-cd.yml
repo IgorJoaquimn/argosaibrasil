@@ -1,0 +1,137 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # Job for testing and quality checks
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run ESLint
+      run: npm run lint
+      
+    - name: Run TypeScript type checking
+      run: npm run type-check
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Test build output
+      run: |
+        # Check if dist directory exists and has content
+        if [ ! -d "dist" ]; then
+          echo "❌ Build failed: dist directory not found"
+          exit 1
+        fi
+        
+        if [ ! -f "dist/index.html" ]; then
+          echo "❌ Build failed: index.html not found in dist"
+          exit 1
+        fi
+        
+        echo "✅ Build successful: $(du -sh dist | cut -f1) total size"
+        echo "📁 Build contents:"
+        ls -la dist/
+        
+    # Optional: Upload build artifacts for debugging
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: build-output
+        path: dist/
+        retention-days: 7
+
+  # Job for GitHub Pages deployment (only on main/master)
+  deploy-github-pages:
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    needs: test
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build for production
+      run: npm run build
+      
+    - name: Setup GitHub Pages
+      uses: actions/configure-pages@v4
+      
+    - name: Upload to GitHub Pages
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./dist
+        
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+      
+  # Optional: Deploy to Netlify (uncomment and configure if needed)
+  # deploy-netlify:
+  #   if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v4
+  #     
+  #   - name: Setup Node.js ${{ env.NODE_VERSION }}
+  #     uses: actions/setup-node@v4
+  #     with:
+  #       node-version: ${{ env.NODE_VERSION }}
+  #       cache: 'npm'
+  #       
+  #   - name: Install dependencies
+  #     run: npm ci
+  #     
+  #   - name: Build for production
+  #     run: npm run build
+  #     
+  #   - name: Deploy to Netlify
+  #     uses: netlify/actions/cli@master
+  #     with:
+  #       args: deploy --prod --dir=dist
+  #     env:
+  #       NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+  #       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
