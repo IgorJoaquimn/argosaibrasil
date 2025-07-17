@@ -5,9 +5,9 @@ export interface SurveyData {
   consentTerms?: boolean
   selectedContext?: string
   impactSector?: string
-  hopesAndFears?: {
-    hopes?: string
-    fears?: string
+  receiosEesperancas?: {
+    receios?: string
+    esperancas?: string
   }
   aiDescription?: string
   demographics?: {
@@ -27,7 +27,7 @@ export const useSurveyStore = defineStore('survey', () => {
     { path: '/consent', name: 'Consent Terms', key: 'consentTerms' },
     { path: '/context', name: 'Choose Context', key: 'selectedContext' },
     { path: '/impact', name: 'AI Impact Sector', key: 'impactSector' },
-    { path: '/hopes-fears', name: 'Hopes and Fears', key: 'hopesAndFears' },
+    { path: '/receioesperanca', name: 'Receios e Esperanças', key: 'receioesperanca' },
     { path: '/describe-ai', name: 'Describe AI', key: 'aiDescription' },
     { path: '/demographics', name: 'Demographics', key: 'demographics' }
   ]

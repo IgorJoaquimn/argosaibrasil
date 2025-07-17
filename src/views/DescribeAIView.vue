@@ -121,7 +121,7 @@ function saveDescription() {
 
 function goBack() {
   surveyStore.previousStep()
-  router.push('/hopes-fears')
+  router.push('/receioesperanca')
 }
 
 function proceed() {

@@ -3,7 +3,7 @@ import { useSurveyStore } from '@/stores/survey'
 import ConsentView from '@/views/ConsentView.vue'
 import ContextView from '@/views/ContextView.vue'
 import ImpactView from '@/views/ImpactView.vue'
-import HopesFearsView from '@/views/HopesFearsView.vue'
+import ReceioEsperancaView from '@/views/ReceioEsperancaView.vue'
 import DescribeAIView from '@/views/DescribeAIView.vue'
 import DemographicsView from '@/views/DemographicsView.vue'
 import CompletedView from '@/views/CompletedView.vue'
@@ -31,9 +31,9 @@ const router = createRouter({
       component: ImpactView
     },
     {
-      path: '/hopes-fears',
-      name: 'hopes-fears',
-      component: HopesFearsView
+      path: '/receioesperanca',
+      name: 'receioesperanca',
+      component: ReceioEsperancaView
     },
     {
       path: '/describe-ai',

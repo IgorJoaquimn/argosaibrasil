@@ -1,21 +1,31 @@
 <template>
   <div class="max-w-3xl mx-auto">
     <div class="bg-background rounded-xl p-6 lg:p-8">
+    <br>
       <h1 class="text-2xl lg:text-3xl font-semibold text-primary-500 mb-6">
         Termo de Consentimento
       </h1>
-      
+      <br>
+      <br>
       <!-- Consent Text Box -->
       <div class="mb-8">
-        <div class="bg-background-light border border-primary-200 rounded-lg p-4 h-80 overflow-y-auto">
-          <div class="text-primary-500 leading-relaxed space-y-4">
-            <p class="font-semibold text-lg">Seja bem-vindo(a)!</p>
+        
+        <div class="bg-background-light border border-primary-200 rounded-lg px-6 py-8 max-h-[600px] overflow-y-auto">
+
+          
+          <div class="text-primary-500 leading-relaxed space-y-4 px-4">
+        
+           <p class="font-semibold text-lg pl-2">Seja bem-vindo(a)!</p>
+
             
-            <p>Esta pesquisa está sendo realizada por pesquisadores do Departamento de Ciência da Computação da Universidade Federal de Minas Gerais (UFMG) e visa entender melhor as percepções da comunidade acadêmica sobre a inteligência artificial.</p>
+            <br>
             
-            <p>A sua participação consiste em responder a um questionário anônimo, com perguntas sobre sua opinião, experiências e percepções relacionadas ao tema.</p>
-            
-            <p class="font-medium">Ao participar, você está de acordo com os seguintes pontos:</p>
+            <p>Esta pesquisa está sendo realizada por pesquisadores do Departamento de Ciência da Computação da Universidade Federal de Minas Gerais (UFMG) e visa entender melhor as <strong>percepções da comunidade acadêmica</strong> sobre a inteligência artificial.</p>
+            <br>
+
+            <p>A sua participação consiste em responder a um <strong>questionário anônimo</strong>, com perguntas sobre sua opinião, experiências e percepções relacionadas ao tema.</p>
+            <br>
+            <p class="font-medium">Ao participar, <strong>você está de acordo</strong> com os seguintes pontos:</p>
             
             <ul class="space-y-3 pl-4">
               <li class="flex items-start">
@@ -44,12 +54,14 @@
               </li>
             </ul>
             
-            <p>Em caso de dúvidas, você pode entrar em contato com a equipe de pesquisa pelo e-mail: <a href="mailto:argosia@dcc.ufmg.br" class="text-primary-600 hover:text-primary-700 underline">argosia@dcc.ufmg.br</a>.</p>
-            
+            <br>
+            <p>Em caso de dúvidas, você pode entrar em contato com a equipe de pesquisa pelo e-mail: <a href="mailto:argosia@dcc.ufmg.br" class="text-primary-600 hover:text-primary-700 underline">argosiabrasil@gmail.com</a>.</p>
+            <br>
             <p class="font-semibold">Muito obrigado(a) pela sua colaboração!</p>
           </div>
         </div>
       </div>
+      <br>
       
       <!-- Consent Checkbox -->
       <div class="flex items-center justify-center space-x-4 w-full mb-10">
@@ -58,21 +70,21 @@
           v-model="agreed" 
           type="checkbox" 
           class="w-5 h-5 text-primary-500 bg-background border-primary-300 rounded focus:ring-primary-500 focus:ring-2 focus:ring-offset-0 mt-0.5"
-        >
+        >&nbsp;
         <label for="consent" class="ml-3 text-primary-500 leading-relaxed">
-          Concordo em participar desta pesquisa e consinto com a coleta e uso dos meus dados 
-          conforme descrito acima.
+          Concordo em participar da pesquisa e aceito responder às perguntas deste questionário.
+          
         </label>
       </div>
-      
+      <br>
       <!-- Action Button -->
       <div class="flex justify-center w-full">
         <button 
           @click="proceed" 
           :disabled="!agreed"
-          class="px-8 py-3 bg-primary-500 rounded-lg font-medium hover:bg-primary-600 disabled:bg-primary-200 disabled:text-primary-400 disabled:cursor-not-allowed transition-all duration-200 flex items-center"
+          class="px-8 py-3 bg-primary-500 rounded-lg font-medium hover:bg-primary-600 disabled:bg-primary-200 disabled:text-primary-400 disabled:cursor-not-allowed transition-all duration-200 flex items-center whitespace-nowrap"
         >
-          Continuar para a Pesquisa
+          Responder a Pesquisa
           <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
           </svg>
@@ -80,7 +92,10 @@
       </div>
     </div>
   </div>
+  <br>
 </template>
+
+
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
