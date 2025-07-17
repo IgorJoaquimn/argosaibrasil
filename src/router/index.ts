@@ -1,23 +1,65 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { useSurveyStore } from '@/stores/survey'
+import ConsentView from '@/views/ConsentView.vue'
+import ContextView from '@/views/ContextView.vue'
+import ImpactView from '@/views/ImpactView.vue'
+import HopesFearsView from '@/views/HopesFearsView.vue'
+import DescribeAIView from '@/views/DescribeAIView.vue'
+import DemographicsView from '@/views/DemographicsView.vue'
+import CompletedView from '@/views/CompletedView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView
+      redirect: '/consent'
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      path: '/consent',
+      name: 'consent',
+      component: ConsentView
+    },
+    {
+      path: '/context',
+      name: 'context',
+      component: ContextView
+    },
+    {
+      path: '/impact',
+      name: 'impact',
+      component: ImpactView
+    },
+    {
+      path: '/hopes-fears',
+      name: 'hopes-fears',
+      component: HopesFearsView
+    },
+    {
+      path: '/describe-ai',
+      name: 'describe-ai',
+      component: DescribeAIView
+    },
+    {
+      path: '/demographics',
+      name: 'demographics',
+      component: DemographicsView
+    },
+    {
+      path: '/completed',
+      name: 'completed',
+      component: CompletedView
     }
   ]
+})
+
+// Navigation guard to sync route with store
+router.beforeEach((to) => {
+  const surveyStore = useSurveyStore()
+  const stepIndex = surveyStore.steps.findIndex(step => step.path === to.path)
+  if (stepIndex !== -1) {
+    surveyStore.goToStep(stepIndex)
+  }
 })
 
 export default router

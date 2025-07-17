@@ -1,54 +1,46 @@
-/* color palette from <https://github.com/vuejs/theme> */
+/* Argos IA Brasil Color Palette */
 :root {
-  --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
-  --vt-c-white-mute: #f2f2f2;
+  /* Primary Colors */
+  --primary-green: #426859;
+  --header-bg: #F3F5F4;
+  
+  /* Text Colors */
+  --text-primary: #426859;
+  --text-secondary: #6b947e;
+  --text-muted: #92b3a1;
+  
+  /* Background Colors */
+  --bg-white: #F3F5F4;
+  --bg-light: #FAFBFA;
+  --bg-muted: #E8EBE9;
+  
+  /* Border Colors */
+  --border-light: #bacfc4;
+  --border-medium: #92b3a1;
+  --border-dark: #6b947e;
+  
+  /* Status Colors */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  
+  /* Semantic Variables */
+  --color-background: var(--bg-white);
+  --color-background-soft: var(--bg-light);
+  --color-background-mute: var(--bg-muted);
+  --color-background-header: var(--header-bg);
 
-  --vt-c-black: #181818;
-  --vt-c-black-soft: #222222;
-  --vt-c-black-mute: #282828;
+  --color-border: var(--border-light);
+  --color-border-hover: var(--border-medium);
 
-  --vt-c-indigo: #2c3e50;
+  --color-heading: var(--primary-green);
+  --color-text: var(--primary-green);
+  --color-text-secondary: var(--text-secondary);
 
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
-
-  --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+  --section-gap: 80px;
 }
 
-/* semantic color variables for this project */
-:root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
-
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
-
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
-
-  --section-gap: 160px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
-
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
-
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
-  }
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 *,
 *::before,
@@ -62,12 +54,32 @@ body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
-  transition: color 0.5s, background-color 0.5s;
+  transition: color 0.3s, background-color 0.3s;
   line-height: 1.6;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
     Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin-left: 96px;
+  margin-right: 96px;
+}
+
+/* Typography Classes */
+.font-jetbrains {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Component Base Styles */
+button {
+  font-family: inherit;
+}
+
+input, textarea, select {
+  font-family: inherit;
 }
