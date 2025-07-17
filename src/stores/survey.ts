@@ -8,17 +8,28 @@ export interface SurveyData {
   receiosEesperancas?: {
     receios?: string
     esperancas?: string
+    fearScale?: number
+    hopeScale?: number
   }
   aiDescription?: string
   demographics?: {
     age?: string
     gender?: string
+    customGender?: string  
     state?: string
     occupation?: string
+    profession?: string          // ADICIONE esta linha
+    otherProfession?: string     // ADICIONE esta linha
+
   }
-  
+
   aiPriorities?: (string | null)[]
+  selectedSectors?: string[]       
+  otherSector?: string    
 }
+
+
+
 
 export const useSurveyStore = defineStore('survey', () => {
   const currentStep = ref(0)

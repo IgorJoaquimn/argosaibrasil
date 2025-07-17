@@ -122,11 +122,15 @@ const hopeText = ref('')
 
 onMounted(() => {
   const data = surveyStore.data.receiosEesperancas || {}
-  fearScale.value = data.receios ?? 3
-  hopeScale.value = data.esperancas ?? 3
+  fearScale.value = data.fearScale ?? 3
+  hopeScale.value = data.hopeScale ?? 3
   fearText.value = data.receios || ''
   hopeText.value = data.esperancas || ''
 })
+
+
+
+
 
 function saveFears() {
   const current = surveyStore.data.receiosEesperancas || {}
@@ -155,9 +159,7 @@ function proceed() {
   }
 }
 
-function saveEsperancas(novoValor) {
-  surveyStore.updateData('receiosEesperancas', { esperancas: novoValor })
-}
+
 
 
 </script>
