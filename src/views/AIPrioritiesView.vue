@@ -108,7 +108,7 @@ const currentPair = computed(() => pairs[currentIndex.value])
 const router = useRouter()
 const surveyStore = useSurveyStore()
 
-//const selectedOption = ref('')
+const selectedOption = ref('')
 
 
 function selectOption(value:string) {

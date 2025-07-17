@@ -15,10 +15,8 @@ export interface SurveyData {
     gender?: string
     state?: string
     occupation?: string
-    aiPriorities?: (string | null)[]   
-    // profession?: string
-    // aiExperience?: string
   }
+  aiPriorities?: (string | null)[]
 }
 
 export const useSurveyStore = defineStore('survey', () => {
