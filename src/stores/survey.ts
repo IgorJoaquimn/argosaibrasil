@@ -15,6 +15,7 @@ export interface SurveyData {
     gender?: string
     state?: string
     occupation?: string
+    aiPriorities?: string[] 
     // profession?: string
     // aiExperience?: string
   }
