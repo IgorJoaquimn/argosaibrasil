@@ -4,7 +4,7 @@ import { ref, computed } from 'vue'
 export interface SurveyData {
   consentTerms?: boolean
   selectedContext?: string
-  impactSector?: string
+  // impactSector?: string
   receiosEesperancas?: {
     receios?: string
     esperancas?: string
@@ -13,9 +13,10 @@ export interface SurveyData {
   demographics?: {
     age?: string
     gender?: string
-    education?: string
-    profession?: string
-    aiExperience?: string
+    state?: string
+    occupation?: string
+    // profession?: string
+    // aiExperience?: string
   }
 }
 
@@ -26,10 +27,15 @@ export const useSurveyStore = defineStore('survey', () => {
   const steps = [
     { path: '/consent', name: 'Consent Terms', key: 'consentTerms' },
     { path: '/context', name: 'Choose Context', key: 'selectedContext' },
-    { path: '/impact', name: 'AI Impact Sector', key: 'impactSector' },
+   // { path: '/impact', name: 'AI Impact Sector', key: 'impactSector' },
     { path: '/receioesperanca', name: 'Receios e Esperanças', key: 'receioesperanca' },
+    { path: '/demographics', name: 'Demographics', key: 'demographics' },
+    { path: '/demographics-gender', name: 'Demographics Gender', key: 'demographics-gender' },
+    { path: '/demographics-state', name: 'Demographics State', key: 'demographics-state' },
+    { path: '/demographics-occupation', name: 'Demographics Occupation', key: 'demographics-occupation' },
+    { path: '/ai-priorities', name: 'AI Priorities', key: 'ai-priorities' },
     { path: '/describe-ai', name: 'Describe AI', key: 'aiDescription' },
-    { path: '/demographics', name: 'Demographics', key: 'demographics' }
+    { path: '/summary', name:'Survey Summary', key:'summary'}
   ]
 
   const currentStepData = computed(() => steps[currentStep.value])
@@ -54,9 +60,19 @@ export const useSurveyStore = defineStore('survey', () => {
     }
   }
 
+  // function updateData(key: keyof SurveyData, value: any) {
+  //   data.value[key] = value
+  // }
+
   function updateData(key: keyof SurveyData, value: any) {
+  if (typeof data.value[key] === 'object' && data.value[key] !== null && typeof value === 'object') {
+    data.value[key] = { ...data.value[key], ...value }
+  } else {
     data.value[key] = value
   }
+}
+
+
 
   function resetSurvey() {
     currentStep.value = 0

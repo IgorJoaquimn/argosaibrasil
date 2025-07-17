@@ -1,0 +1,171 @@
+<template>
+  <div class="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow">
+    <h2 class="text-2xl font-semibold mb-8 text-center leading-snug">
+      Em qual dessas direções você esperaria que o Brasil tivesse avançado no uso da IA?
+    </h2>
+    <br>
+    <br>
+
+  
+    <div class="flex items-start justify-center gap-6 mb-6">
+      <!-- Caixa A + contador -->
+      <div class="flex flex-col items-center flex-1">
+        <button
+          @click="selectOption(currentPair.optionA.value)"
+          class="flex-1 max-w-[45%] p-6 border rounded-lg cursor-pointer select-none text-center transition break-words bg-gray-100 border-gray-300 hover:bg-gray-200"
+        >
+          {{ currentPair.optionA.label }}
+        </button>
+        <div class="text-sm text-gray-500 mt-2 self-start">
+          {{ currentIndex + 1 }}/{{ pairs.length }}
+        </div>
+      </div>
+
+      <!-- Texto "ou" -->
+      <div class="flex items-center justify-center text-gray-600 font-semibold select-none text-lg pt-6">
+        ou
+      </div>
+
+      <!-- Caixa B -->
+      <div class="flex flex-col items-center flex-1">
+        <button
+          @click="selectOption(currentPair.optionB.value)"
+          class="flex-1 max-w-[45%] p-6 border rounded-lg cursor-pointer select-none text-center transition break-words bg-gray-100 border-gray-300 hover:bg-gray-200"
+        >
+          {{ currentPair.optionB.label }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Botão Pular -->
+<div class="flex flex-col items-center gap-4 mb-6">
+  <button
+    v-if="currentIndex < pairs.length - 1"
+    @click="skip"
+    class="px-4 py-2 text-gray-600 hover:text-gray-900 cursor-pointer"
+  >
+    Pular
+  </button>
+
+  <button
+    v-if="currentIndex === pairs.length - 1"
+    @click="proceed"
+    class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
+  >
+    Continuar
+  </button>
+</div>
+
+
+
+    <!-- Botão Voltar -->
+    <div class="flex justify-start">
+      <button
+        @click="goBack"
+        class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+      >
+        Voltar
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useSurveyStore } from '@/stores/survey'
+
+
+// Pares fixos por ora, depois pode vir do banco
+const pairs = [
+  {
+    optionA: { label: 'Promover inclusão social com IA', value: 'inclusao_social' },
+    optionB: { label: 'Evitar que a IA aprofunde desigualdades', value: 'evitar_desigualdades' }
+  },
+  {
+    optionA: { label: 'Fomentar inovação tecnológica', value: 'fomentar_inovacao' },
+    optionB: { label: 'Garantir segurança e privacidade', value: 'seguranca_privacidade' }
+  },
+  {
+    optionA: { label: 'Ampliar acesso à educação com IA', value: 'acesso_educacao' },
+    optionB: { label: 'Reduzir viés e discriminação em sistemas de IA', value: 'reduzir_vies' }
+  },
+  {
+    optionA: { label: 'Promover sustentabilidade ambiental', value: 'sustentabilidade' },
+    optionB: { label: 'Manter controle humano sobre decisões importantes', value: 'controle_humano' }
+  },
+  {
+    optionA: { label: 'Expandir uso de IA na saúde pública', value: 'ia_saude_publica' },
+    optionB: { label: 'Evitar dependência excessiva de tecnologia', value: 'evitar_dependencia' }
+  }
+]
+
+const currentIndex = ref(0)
+const currentPair = computed(() => pairs[currentIndex.value])
+
+
+const router = useRouter()
+const surveyStore = useSurveyStore()
+
+//const selectedOption = ref('')
+
+
+function selectOption(value:string) {
+  saveAnswer(value)
+
+  if (currentIndex.value < pairs.length - 1) {
+    currentIndex.value++
+    //currentPair.value = pairs[currentIndex.value]
+  } else {
+    // Finalizou todas as perguntas
+    surveyStore.nextStep()
+    router.push('/describe-ai') // ajuste para sua próxima rota
+  }
+}
+
+
+function skip() {
+  saveAnswer(null)
+ 
+  if (currentIndex.value < pairs.length - 1) {
+    currentIndex.value++
+    //currentPair.value = pairs[currentIndex.value]
+  } else {
+    surveyStore.nextStep()
+    router.push('/describe-ai') // ajuste para sua próxima rota
+  
+  }
+}
+
+function saveAnswer(value: string | null) {
+  const currentAnswers = surveyStore.data.aiPriorities || []
+  // Guarda a resposta ou null para pular
+  currentAnswers[currentIndex.value] = value
+  surveyStore.updateData('aiPriorities', currentAnswers)
+}
+
+function nextPair() {
+  saveAnswer(selectedOption.value)
+  selectedOption.value = ''
+  if (currentIndex.value < pairs.length - 1) {
+    currentIndex.value++
+  } else {
+    // finalizou todas as perguntas
+    surveyStore.nextStep()
+    router.push('/next-step-route') // Ajuste para sua próxima rota
+  }
+}
+
+function goBack() {
+  surveyStore.previousStep()
+  router.push('/demographics-occupation') // ou a etapa anterior que você tiver
+}
+
+
+function proceed() {
+  surveyStore.nextStep()
+  router.push('/describe-ai') // ajuste conforme sua próxima rota
+}
+
+</script>

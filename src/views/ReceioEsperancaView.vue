@@ -1,11 +1,11 @@
 <template>
   <div class="max-w-4xl mx-auto p-6">
     <div class="bg-white rounded-lg shadow-md p-8">
-      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Receios e Expectativas</h2>
+      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Preocupações e Expectativas</h2>
       
       <!-- Seus receios -->
       <section class="mb-10">
-        <h3 class="text-xl font-semibold text-gray-900 mb-2 text-left">Seus receios em relação à IA:</h3>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2 text-left">Suas preocupações em relação à IA:</h3>
         <label for="fear-scale" class="block mb-1 text-gray-700 text-left">
           Em uma escala de 1 a 5, quanto você se sente preocupado(a) com os riscos da IA?
         </label>
@@ -15,7 +15,7 @@
           min="1" max="5" step="1" 
           v-model="fearScale"
           class="w-full"
-          @input="saveFearLevel"
+          @input="saveFears"
         />
         <div class="grid grid-cols-5 justify-between text-sm text-gray-600 mt-1 px-1 select-none">
           <span class="text-center">1</span>
@@ -56,6 +56,7 @@
           min="1" max="5" step="1" 
           v-model="hopeScale"
           class="w-full"
+          @input="saveHopes"
         />
        <div class="grid grid-cols-5 justify-between text-sm text-gray-600 mt-1 px-1 select-none">
   <span class="text-center">1</span>
@@ -83,13 +84,7 @@
         ></textarea>
       </section>
 
-      <!-- Aviso -->
-      <!-- Aviso -->
-
-
-
-
-      <!-- Botões -->
+     <!-- Botões -->
       <div class="flex justify-between">
         <button 
           @click="goBack" 
@@ -123,23 +118,26 @@ const hopeScale = ref(3)
 const fearText = ref('')
 const hopeText = ref('')
 
+
+
 onMounted(() => {
-  const data = surveyStore.data.hopesAndFears || {}
-  fearScale.value = data.fearScale ?? 3
-  hopeScale.value = data.hopeScale ?? 3
-  fearText.value = data.fears || ''
-  hopeText.value = data.hopes || ''
+  const data = surveyStore.data.receiosEesperancas || {}
+  fearScale.value = data.receios ?? 3
+  hopeScale.value = data.esperancas ?? 3
+  fearText.value = data.receios || ''
+  hopeText.value = data.esperancas || ''
 })
 
 function saveFears() {
-  const current = surveyStore.data.hopesAndFears || {}
-  surveyStore.updateData('hopesAndFears', { ...current, fearScale: fearScale.value, fears: fearText.value })
+  const current = surveyStore.data.receiosEesperancas || {}
+  surveyStore.updateData('receiosEesperancas', { ...current, receios: fearText.value, fearScale: fearScale.value })
 }
 
 function saveHopes() {
-  const current = surveyStore.data.hopesAndFears || {}
-  surveyStore.updateData('hopesAndFears', { ...current, hopeScale: hopeScale.value, hopes: hopeText.value })
+  const current = surveyStore.data.receiosEesperancas || {}
+  surveyStore.updateData('receiosEesperancas', { ...current, esperancas: hopeText.value, hopeScale: hopeScale.value })
 }
+
 
 const canProceed = computed(() => {
   return fearText.value.trim().length > 0 || hopeText.value.trim().length > 0
@@ -153,9 +151,15 @@ function goBack() {
 function proceed() {
   if(canProceed.value){
     surveyStore.nextStep()
-    router.push('/describe-ai')
+    router.push('/demographics')
   }
 }
+
+function saveEsperancas(novoValor) {
+  surveyStore.updateData('receiosEesperancas', { esperancas: novoValor })
+}
+
+
 </script>
 
 <style scoped>
