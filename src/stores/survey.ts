@@ -16,6 +16,7 @@ export interface SurveyData {
     state?: string
     occupation?: string
   }
+  
   aiPriorities?: (string | null)[]
 }
 

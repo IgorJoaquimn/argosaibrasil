@@ -108,7 +108,7 @@ const currentPair = computed(() => pairs[currentIndex.value])
 const router = useRouter()
 const surveyStore = useSurveyStore()
 
-const selectedOption = ref('')
+const selectedOption = ref<string | null>(null)
 
 
 function selectOption(value:string) {
@@ -139,11 +139,12 @@ function skip() {
 }
 
 function saveAnswer(value: string | null) {
-  const currentAnswers = surveyStore.data.aiPriorities || []
-  // Guarda a resposta ou null para pular
+  // Cria uma cópia para evitar mutação direta
+  const currentAnswers = surveyStore.data.aiPriorities ? [...surveyStore.data.aiPriorities] : []
   currentAnswers[currentIndex.value] = value
   surveyStore.updateData('aiPriorities', currentAnswers)
 }
+
 
 function nextPair() {
   saveAnswer(selectedOption.value)
