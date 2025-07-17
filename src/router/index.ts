@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
 import ConsentView from '@/views/ConsentView.vue'
 import ContextView from '@/views/ContextView.vue'
-import ImpactView from '@/views/ImpactView.vue'
+// import ImpactView from '@/views/ImpactView.vue'
 import ReceioEsperancaView from '@/views/ReceioEsperancaView.vue'
 import DemographicsView from '@/views/DemographicsView.vue'
 import DemographicsGenderView from '@/views/DemographicsGenderView.vue'
@@ -30,11 +30,11 @@ const router = createRouter({
       name: 'context',
       component: ContextView
     },
-    {
-      path: '/impact',
-      name: 'impact',
-      component: ImpactView
-    },
+    // {
+    //   path: '/impact',
+    //   name: 'impact',
+    //   component: ImpactView
+    // },
     {
       path: '/receioesperanca',
       name: 'receioesperanca',

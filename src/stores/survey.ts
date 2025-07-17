@@ -4,7 +4,7 @@ import { ref, computed } from 'vue'
 export interface SurveyData {
   consentTerms?: boolean
   selectedContext?: string
-  // impactSector?: string
+  impactSector?: string
   receiosEesperancas?: {
     receios?: string
     esperancas?: string
