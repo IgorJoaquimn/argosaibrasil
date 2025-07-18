@@ -8,7 +8,7 @@ import AppHeader from '@/components/AppHeader.vue'
     <AppHeader />
     
     <!-- Content Area -->
-    <main class="container mx-auto px-4 lg:px-8 max-w-4xl py-8 lg:py-12">
+    <main class="container mx-auto px-4 lg:px-8 py-8 lg:py-12">
       <RouterView />
     </main>
   </div>

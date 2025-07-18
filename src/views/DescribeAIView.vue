@@ -50,7 +50,7 @@
       <div class="flex justify-between">
         <button 
           @click="goBack" 
-          class="px-6 py-3 bg-bg-light text-text-secondary rounded-lg font-medium hover:bg-bg-muted transition-colors duration-200 flex items-center"
+          class="btn-go-back flex items-center"
         >
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
@@ -61,7 +61,7 @@
         <button 
           @click="proceed" 
           :disabled="false"
-          class="px-8 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary-600 disabled:bg-border-medium disabled:text-text-muted disabled:cursor-not-allowed transition-all duration-200 flex items-center"
+          class="btn-proceed flex items-center"
         >
           Concluir
           <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,11 +77,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
+import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
 
-const router = useRouter()
 const surveyStore = useSurveyStore()
+const { goBack, proceed: navigateNext } = useSurveyNavigation()
 const description = ref('')
 
 onMounted(() => {
@@ -92,14 +92,9 @@ function saveDescription() {
   surveyStore.updateData('aiDescription', description.value)
 }
 
-function goBack() {
-  surveyStore.previousStep()
-  router.push('/ai-priorities')
-}
-
 function proceed() {
-  surveyStore.nextStep()
-  router.push('/completed')
+  saveDescription()
+  navigateNext()
 }
 
 

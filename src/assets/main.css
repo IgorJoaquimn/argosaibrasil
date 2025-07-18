@@ -1,8 +1,5 @@
 @import './base.css';
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* Clean button styling for navigation */
 .nav-button {
@@ -10,5 +7,41 @@
   background: none;
   outline: none;
   cursor: pointer;
+}
+
+/* Button Classes for Survey Navigation */
+.btn-go-back {
+  padding: 0.75rem 1.5rem;
+  background-color: #e5e7eb;
+  color: #374151;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease-in-out;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-go-back:hover {
+  background-color: #d1d5db;
+}
+
+.btn-proceed {
+  padding: 0.75rem 1.5rem;
+  color: white;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease-in-out;
+  border: none;
+  cursor: pointer;
+  background-color: var(--primary-green);
+}
+
+.btn-proceed:hover:not(:disabled) {
+  background-color: #365248; /* Darker green on hover */
+}
+
+.btn-proceed:disabled {
+  cursor: not-allowed;
+  background-color: #8fae9f; /* Less saturated green when disabled */
 }
 

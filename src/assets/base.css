@@ -14,6 +14,7 @@
   
   /* Background Colors */
   --bg-white: #F3F5F4;
+  --bg-green: #426859;
   --bg-light: #FAFBFA;
   --bg-muted: #E8EBE9;
   
@@ -48,8 +49,13 @@
 *::before,
 *::after {
   box-sizing: border-box;
-  margin: 0;
   font-weight: normal;
+  color: #426859; /* Set text-primary-500 as default for all elements */
+}
+
+/* Set default text color to primary-500 for all elements */
+* {
+  color: #426859; /*  -primary-500 equivalent */
 }
 
 body {

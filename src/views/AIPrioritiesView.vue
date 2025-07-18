@@ -50,7 +50,7 @@
   <button
     v-if="currentIndex === pairs.length - 1"
     @click="proceed"
-    class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition"
+    class="btn-proceed"
   >
     Continuar
   </button>
@@ -62,7 +62,7 @@
     <div class="flex justify-start">
       <button
         @click="goBack"
-        class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+        class="btn-go-back"
       >
         Voltar
       </button>
@@ -71,11 +71,12 @@
 </template>
 
 <script setup lang="ts">
-
 import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
+import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
 
+const surveyStore = useSurveyStore()
+const { goBack, proceed: navigateNext } = useSurveyNavigation()
 
 // Pares fixos por ora, depois pode vir do banco
 const pairs = [
@@ -104,69 +105,36 @@ const pairs = [
 const currentIndex = ref(0)
 const currentPair = computed(() => pairs[currentIndex.value])
 
-
-const router = useRouter()
-const surveyStore = useSurveyStore()
-
-const selectedOption = ref<string | null>(null)
-
-
-function selectOption(value:string) {
+function selectOption(value: string) {
   saveAnswer(value)
 
   if (currentIndex.value < pairs.length - 1) {
     currentIndex.value++
-    //currentPair.value = pairs[currentIndex.value]
   } else {
     // Finalizou todas as perguntas
-    surveyStore.nextStep()
-    router.push('/describe-ai') // ajuste para sua próxima rota
+    navigateNext()
   }
 }
-
 
 function skip() {
   saveAnswer(null)
  
   if (currentIndex.value < pairs.length - 1) {
     currentIndex.value++
-    //currentPair.value = pairs[currentIndex.value]
   } else {
-    surveyStore.nextStep()
-    router.push('/describe-ai') // ajuste para sua próxima rota
-  
+    navigateNext()
   }
 }
 
 function saveAnswer(value: string | null) {
   // Cria uma cópia para evitar mutação direta
-  const currentAnswers = surveyStore.data.aiPriorities ? [...surveyStore.data.aiPriorities] : []
+  const currentAnswers = Array.isArray(surveyStore.data.aiPriorities) ? [...surveyStore.data.aiPriorities] : []
   currentAnswers[currentIndex.value] = value
   surveyStore.updateData('aiPriorities', currentAnswers)
 }
 
-
-function nextPair() {
-  saveAnswer(selectedOption.value)
-  selectedOption.value = ''
-  if (currentIndex.value < pairs.length - 1) {
-    currentIndex.value++
-  } else {
-    // finalizou todas as perguntas
-    surveyStore.nextStep()
-    router.push('/next-step-route') // Ajuste para sua próxima rota
-  }
-}
-
-function goBack() {
-  surveyStore.previousStep()
-  router.push('/demographics-occupation') // ou a etapa anterior que você tiver
-}
-
-
+// For the manual proceed button (when on last question)
 function proceed() {
-  surveyStore.nextStep()
-  router.push('/describe-ai') // ajuste conforme sua próxima rota
+  navigateNext()
 }
-
 </script>

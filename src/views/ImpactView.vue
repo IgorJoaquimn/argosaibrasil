@@ -34,7 +34,7 @@
       <div class="flex justify-between">
         <button 
           @click="goBack" 
-          class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+          class="btn-go-back"
         >
           Previous
         </button>
@@ -42,7 +42,7 @@
         <button 
           @click="proceed" 
           :disabled="!selectedSector"
-          class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+          class="btn-proceed"
         >
           Continue
         </button>
@@ -53,11 +53,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
+import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
 
-const router = useRouter()
 const surveyStore = useSurveyStore()
+const { goBack, proceed: navigateNext } = useSurveyNavigation()
 const selectedSector = ref('')
 
 const sectors = [
@@ -122,15 +122,9 @@ function selectSector(value: string) {
   surveyStore.updateData('impactSector', value)
 }
 
-function goBack() {
-  surveyStore.previousStep()
-  router.push('/context')
-}
-
 function proceed() {
   if (selectedSector.value) {
-    surveyStore.nextStep()
-    router.push('/hopes-fears')
+    navigateNext()
   }
 }
 </script>

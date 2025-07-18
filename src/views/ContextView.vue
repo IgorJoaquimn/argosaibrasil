@@ -79,15 +79,15 @@
       <div class="flex justify-between mt-6">
         <button
           @click="goBack"
-          class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+          class="btn-go-back"
         >
           Voltar
         </button>
 
         <button
           @click="proceed"
-          :disabled="selectedContexts.length === 0 || selectedContexts.length > 3"
-          class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+          :disabled="!canProceed"
+          class="btn-proceed"
         >
           Continuar
         </button>
@@ -98,11 +98,11 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
+import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
 
-const router = useRouter()
 const surveyStore = useSurveyStore()
+const { goBack, proceed: navigateNext } = useSurveyNavigation()
 
 const selectedContexts = ref<string[]>([])
 const otherText = ref('')
@@ -120,7 +120,6 @@ const contexts = [
   { value: 'transporte', title: 'Transporte e mobilidade' },
   { value: 'agricultura', title: 'Agricultura' },
   { value: 'outros', title: 'Outros' }
-
 ]
 
 // Divide o array em pares para 2 colunas
@@ -132,24 +131,24 @@ const contextPairs = computed(() => {
   return pairs
 })
 
+const canProceed = computed(() => 
+  selectedContexts.value.length > 0 && selectedContexts.value.length <= 3
+)
+
 onMounted(() => {
   selectedContexts.value = surveyStore.data.selectedSectors || []
   otherText.value = surveyStore.data.otherSector || ''
 })
 
-function goBack() {
-  surveyStore.previousStep()
-  router.push('/consent')
-}
-
 function proceed() {
-  if (selectedContexts.value.length > 0 && selectedContexts.value.length <= 3) {
+  if (canProceed.value) {
+    // Save data first
     surveyStore.updateData('selectedSectors', selectedContexts.value)
     if (selectedContexts.value.includes('outros')) {
       surveyStore.updateData('otherSector', otherText.value)
     }
-    surveyStore.nextStep()
-    router.push('/receioesperanca')
+    // Then navigate using the composable
+    navigateNext()
   }
 }
 </script>

@@ -28,12 +28,18 @@
         </label>
       </div>
 
-      <div class="flex justify-end mt-6">
+      <div class="flex justify-between mt-6">
+        <button
+          @click="goBack"
+          class="btn-go-back"
+        >
+          Voltar
+        </button>
+        
         <button
           @click="proceed"
           :disabled="!canProceed"
-          class="px-6 py-3 rounded-lg font-medium text-white transition-colors"
-          :class="canProceed ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'"
+          class="btn-proceed"
         >
           Continuar
         </button>
@@ -44,11 +50,11 @@
 
 <script setup lang="ts">
 import { reactive, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
+import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
 
-const router = useRouter()
 const surveyStore = useSurveyStore()
+const { goBack, proceed: navigateNext } = useSurveyNavigation()
 
 const demographics = reactive({
   age: ''
@@ -74,8 +80,6 @@ onMounted(() => {
   }
 })
 
-
-
 function saveDemographics() {
   const currentDemo = surveyStore.data.demographics || {}
   surveyStore.updateData('demographics', { ...currentDemo, ...demographics })
@@ -84,12 +88,7 @@ function saveDemographics() {
 function proceed() {
   if (canProceed.value) {
     saveDemographics()
-    router.push('/demographics-gender') // ou qualquer rota desejada
+    navigateNext()
   }
 }
-
-
-
-
-
 </script>

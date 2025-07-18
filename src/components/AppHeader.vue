@@ -5,18 +5,12 @@
         <!-- Logo + Title Section (Left) -->
         <div class="flex items-center" style="gap: 1rem;">
          
-          <img alt="Argos IA Brasil" src="@/assets/logo_argos.png" class="w-[100px] h-[100px] sm:w-[80px] sm:h-[80px] md:w-[100px] md:h-[100px]" />
+          <img alt="Argos IA Brasil" src="@/assets/logo_argos.png" class="w-12 h-12 xs:w-16 xs:h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 object-contain flex-shrink-0" />
         <h1 class="flex-1 text-xl sm:text-3xl lg:text-4xl font-semibold text-primary-500 break-words">
- 
-          
+
           Argos IA Brasil
           </h1>
         </div>
-
-
-
-      
-
         <!-- Navigation Section (Right) -->
         <nav class="flex items-center gap-4">
           <!-- seus botões aqui -->

@@ -44,7 +44,7 @@
       <div class="flex justify-between">
         <button
           @click="goBack"
-          class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+          class="btn-go-back"
         >
           Voltar
         </button>
@@ -52,7 +52,7 @@
         <button
           @click="proceed"
           :disabled="!canProceed"
-          class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+          class="btn-proceed"
         >
           Continuar
         </button>
@@ -63,11 +63,11 @@
 
 <script setup lang="ts">
 import { reactive, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
+import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
 
-const router = useRouter()
 const surveyStore = useSurveyStore()
+const { goBack, proceed: navigateNext } = useSurveyNavigation()
 
 const demographics = reactive({
   profession: '',
@@ -113,15 +113,10 @@ function onProfessionChange() {
   saveDemographics()
 }
 
-function goBack() {
-  surveyStore.previousStep()
-  router.push('/demographics-state') // Ajuste para a rota anterior correta
-}
-
 function proceed() {
   if (canProceed.value) {
-    surveyStore.nextStep()
-    router.push('/ai-priorities') // Ajuste para próxima rota
+    saveDemographics()
+    navigateNext()
   }
 }
 </script>

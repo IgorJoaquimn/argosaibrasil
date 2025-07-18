@@ -87,7 +87,7 @@
       <div class="flex justify-between">
         <button 
           @click="goBack" 
-          class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+          class="btn-go-back"
         >
           Voltar
         </button>
@@ -95,7 +95,7 @@
         <button 
           @click="proceed" 
           :disabled="!canProceed"
-          class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+          class="btn-proceed"
         >
           Continuar
         </button>
@@ -106,11 +106,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
+import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
 
-const router = useRouter()
 const surveyStore = useSurveyStore()
+const { goBack, proceed: navigateNext } = useSurveyNavigation()
 
 const fearScale = ref(0)
 const hopeScale = ref(0)
@@ -150,15 +150,9 @@ const canProceed = computed(() => {
   return fearText.value.trim().length > 0 || hopeText.value.trim().length > 0
 })
 
-function goBack() {
-  surveyStore.previousStep()
-  router.push('/impact')
-}
-
 function proceed() {
   if(canProceed.value){
-    surveyStore.nextStep()
-    router.push('/demographics')
+    navigateNext()
   }
 }
 
