@@ -83,7 +83,66 @@ export const useSurveyStore = defineStore('survey', () => {
   }
 }
 
+  function generateUniqueId(): string {
+    const timestamp = Date.now().toString(36)              // Base36 timestamp
+    const randomPart = Math.random().toString(36).substr(2, 6) // 6 random chars
+    return `${timestamp}-${randomPart}`
+  }
 
+  function getOrCreateUserId(): string {
+    const key = 'userId'
+    let id = localStorage.getItem(key)
+    if (!id) {
+      id = generateUniqueId()
+      localStorage.setItem(key, id)
+    }
+    return id
+  }
+
+
+  async function saveData() {
+    try {
+      const fileName = `events/survey-${getOrCreateUserId()}.json`
+      const FUNCTION_URL = 'https://argosaibrasil-cf-649632774475.southamerica-east1.run.app/'
+
+      // 1. Request signed URL from backend
+      const response = await fetch(FUNCTION_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          fileName,
+          method: 'PUT'
+        })
+      })
+
+      const result = await response.json()
+
+      if (!response.ok || !result.signed_url) {
+        console.error('Failed to get signed URL:', result)
+        throw new Error('Could not retrieve signed URL')
+      }
+
+      const signedUrl = result.signed_url
+      // 2. Upload data to the signed URL
+      const uploadResponse = await fetch(signedUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data.value)
+      })
+
+      if (!uploadResponse.ok) {
+        throw new Error('Upload failed')
+      }
+
+      console.log('✅ Data uploaded successfully')
+    } catch (error) {
+      console.error('❌ Error saving data:', error)
+    }
+  }
 
   function resetSurvey() {
     currentStep.value = 0
@@ -101,6 +160,7 @@ export const useSurveyStore = defineStore('survey', () => {
     previousStep,
     goToStep,
     updateData,
+    saveData,
     resetSurvey
   }
 }, {
