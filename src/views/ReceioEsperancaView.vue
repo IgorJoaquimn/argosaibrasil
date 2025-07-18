@@ -1,32 +1,32 @@
+
+
 <template>
-  <div class="max-w-4xl mx-auto p-6">
+  <div class="max-w-3xl mx-auto">
     <div class="bg-white rounded-lg shadow-md p-8">
-      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center py-6">Preocupações e Expectativas</h2>
+      <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Preocupações e Expectativas</h2>
+
+  
       
       <!-- Seus receios -->
       <section class="mb-10">
         <h3 class="text-xl font-semibold text-gray-900 mb-2 text-left">Suas preocupações em relação à IA:</h3>
         <label for="fear-scale" class="block mb-1 text-gray-700 text-left">
-          Em uma escala de 0 a 100, quanto você se <span style="font-weight: 700;">sente preocupado(a) </span> com os riscos da IA?
+          Em uma escala de 0 a 10, quanto você se <span style="font-weight: 700;">sente preocupado(a) </span> com os riscos da IA?
         </label>
 
-        <input 
-          id="fear-scale" 
-          type="range" 
-          min="0" max="100" step="1" 
-          v-model="fearScale"
-          class="w-full"
-          @input="saveFears"
-        />
-        <div class="w-full flex justify-between text-sm text-gray-600 mt-1 px-1 select-none">
-          <span class="text-left">0</span>
-          <span class="text-right">100</span>
+        <input id="fear-scale" type="range" min="0" max="10" step="1" v-model="fearScale" class="w-full" @input="saveFears"/>
+      
+        <div class="flex justify-between text-sm text-gray-500 mt-1 select-none border-t pt-1">
+          <span>0</span>
+          <span>10</span>
         </div>
-        <div class="w-full flex justify-between mt-2">
-          <span class="text-center">Sem receio nenhum</span>
-          <span class="text-lg font-bold text-blue-700 bg-gray0 px-3 py-1 rounded shadow">{{ fearScale }}</span>
-          <span class="text-center">Muito receoso(a)</span>
-        </div>
+
+  <div class="w-full mt-2 flex items-center justify-between text-sm text-gray-700">
+  <span class="text-left">Sem receio nenhum</span>
+  <span class="text-lg font-bold text-blue-700 bg-gray-100 px-3 py-1 rounded shadow text-center">{{ fearScale }}</span>
+  <span class="text-right">Muito receoso(a)</span>
+</div>
+
 
 <!-- Textos abaixo dos números -->
       <br>
@@ -45,34 +45,33 @@
       <section>
         <h3 class="text-xl font-semibold text-gray-900 mb-2 text-left">Suas esperanças em relação à IA:</h3>
         <label for="hope-scale" class="block mb-1 text-gray-700 text-left">
-          Em uma escala de 0 a 100, quanto você se <span style="font-weight: 700;">sente otimista</span> sobre os benefícios da IA?
+          Em uma escala de 0 a 10, quanto você se <span style="font-weight: 700;">sente otimista</span> sobre os benefícios da IA?
         </label>
         <input 
           id="hope-scale" 
           type="range" 
-          min="0" max="100" step="1" 
+          min="0" max="10" step="1" 
           v-model="hopeScale"
           class="w-full"
           @input="saveHopes"
         />
-        <div class="w-full flex justify-between text-sm text-gray-600 mt-1 px-1 select-none">
-          <span class="text-left">0</span>
-          <span class="text-right">100</span>
-        </div>
-        <div class="w-full flex justify-between mt-2">
-          <span class="text-center">Sem esperança alguma</span>
-          <span class="text-lg font-bold text-blue-700 bg-gray-100 px-3 py-1 rounded shadow">{{ hopeScale }}</span>
-          <span class="text-center">Cheio(a) de esperança</span>
+
+        <div class="flex justify-between text-sm text-gray-500 mt-1 select-none border-t pt-1">
+          <span>0</span>
+          <span>10</span>
         </div>
 
+        <div class="w-full mt-2 flex items-center justify-between text-sm text-gray-700">
+          <span class="text-left">Sem esperança alguma</span>
+          <span class="text-lg font-bold text-blue-700 bg-gray-100 px-3 py-1 rounded shadow text-center">{{ hopeScale }}</span>
+          <span class="text-right">Cheio(a) de esperança</span>
+        </div>
+
+
+
+
         <!-- Textos abaixo dos números -->
-        <!-- <div class="grid grid-cols-5 text-base text-gray-900 mt-1 px-1 select-none">
-          <span class="text-center">Sem esperança alguma</span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span class="text-center">Cheio(a) de esperança</span>
-        </div> -->
+        
         <br>
         <textarea
           v-model="hopeText"
@@ -83,22 +82,12 @@
         ></textarea>
       </section>
 
-     <!-- Botões -->
-      <div class="flex justify-between">
-        <button 
-          @click="goBack" 
-          class="btn-go-back"
-        >
-          Voltar
-        </button>
+   
 
-        <button 
-          @click="proceed" 
-          :disabled="!canProceed"
-          class="btn-proceed"
-        >
-          Continuar
-        </button>
+     <!-- Botões -->
+      <div class="flex justify-between mt-6">
+        <button @click="goBack" class="btn-go-back">Voltar</button>
+        <button @click="proceed" :disabled="!canProceed" class="btn-proceed">Continuar</button>
       </div>
     </div>
   </div>
