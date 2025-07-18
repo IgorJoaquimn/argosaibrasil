@@ -24,7 +24,8 @@
             :value="context.value"
             v-model="selectedContexts"
             class="w-5 h-5 mt-1 text-blue-600 border-gray-300 rounded"
-            :disabled="!selectedContexts.includes(context.value) && selectedContexts.length >= 3"
+            :disabled="!safeSelectedContexts.includes(context.value) && safeSelectedContexts.length >= 3"
+
           />
           <label
             :for="context.value"
@@ -61,8 +62,7 @@
 </template>
 
 <script setup lang="ts">
-
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useSurveyStore } from '@/stores/survey'
 import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
 
@@ -87,26 +87,49 @@ const contexts = [
   { value: 'outros', title: 'Outros' }
 ]
 
-console.log(contexts)
+const safeSelectedContexts = computed(() => 
+  Array.isArray(selectedContexts.value) ? selectedContexts.value : []
+)
 
 const canProceed = computed(() => 
   selectedContexts.value.length > 0 && selectedContexts.value.length <= 3
 )
 
 onMounted(() => {
-  selectedContexts.value = surveyStore.data.selectedSectors || []
-  otherText.value = surveyStore.data.otherSector || ''
+  // Só sobrescreve se ainda não estiver setado
+  if (selectedContexts.value.length === 0 && Array.isArray(surveyStore.data.selectedSectors)) {
+    selectedContexts.value = [...surveyStore.data.selectedSectors]
+  }
+  if (!otherText.value && typeof surveyStore.data.otherSector === 'string') {
+    otherText.value = surveyStore.data.otherSector
+  }
 })
 
-function proceed() {
-  if (canProceed.value) {
-    // Save data first
-    surveyStore.updateData('selectedSectors', selectedContexts.value)
-    if (selectedContexts.value.includes('outros')) {
-      surveyStore.updateData('otherSector', otherText.value)
-    }
-    // Then navigate using the composable
-    navigateNext()
+// Atualiza o store sempre que selectedContexts mudar
+watch(selectedContexts, (newVal) => {
+  if (JSON.stringify(newVal) !== JSON.stringify(surveyStore.data.selectedSectors)) {
+    surveyStore.updateData('selectedSectors', newVal)
   }
+}, { deep: true, flush: 'sync' })
+
+// Atualiza o store com o texto dos "outros"
+watch(otherText, (newVal) => {
+  if (selectedContexts.value.includes('outros')) {
+    surveyStore.updateData('otherSector', newVal)
+  }
+},{ flush: 'sync' })
+
+function proceed() {
+  // salva manualmente ANTES de navegar
+  surveyStore.updateData('selectedSectors', selectedContexts.value)
+  surveyStore.updateData('otherSector', otherText.value)
+  navigateNext()
 }
+
+function goBackAndSave() {
+  surveyStore.updateData('selectedSectors', selectedContexts.value)
+  surveyStore.updateData('otherSector', otherText.value)
+  goBack()
+}
+
 </script>

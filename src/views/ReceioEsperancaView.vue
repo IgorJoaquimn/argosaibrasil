@@ -87,7 +87,8 @@
      <!-- Botões -->
       <div class="flex justify-between mt-6">
         <button @click="goBack" class="btn-go-back">Voltar</button>
-        <button @click="proceed" :disabled="!canProceed" class="btn-proceed">Continuar</button>
+        <button @click="proceed" :disabled="!canProceed" class="btn-proceed">
+        Continuar</button>
       </div>
     </div>
   </div>
@@ -144,6 +145,7 @@ function proceed() {
     navigateNext()
   }
 }
+
 
 
 

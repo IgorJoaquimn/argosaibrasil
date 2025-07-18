@@ -1,82 +1,127 @@
 <template>
   <div class="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow">
-    <h2 class="text-2xl font-semibold mb-8 text-center leading-snug">
-      Em qual dessas direções você esperaria que o Brasil tivesse avançado no uso da IA?
+    <h2 class="text-2xl lg:text-3xl font-semibold text-primary mb-4 text-center">
+      Em qual dessas direções você esperaria que <span
+                style="font-weight: 700;">o Brasil tivesse avançado</span> no uso da IA daqui a 10 anos?
     </h2>
     <br>
     <br>
 
-  
-    <div class="flex items-start justify-center gap-6 mb-6">
-      <!-- Caixa A + contador -->
-      <div class="flex flex-col items-center flex-1">
-        <button
-          @click="selectOption(currentPair.optionA.value)"
-          class="flex-1 max-w-[45%] p-6 border rounded-lg cursor-pointer select-none text-center transition break-words bg-gray-100 border-gray-300 hover:bg-gray-200"
-        >
-          {{ currentPair.optionA.label }}
-        </button>
-        <div class="text-sm text-gray-500 mt-2 self-start">
-          {{ currentIndex + 1 }}/{{ pairs.length }}
-        </div>
-      </div>
 
-      <!-- Texto "ou" -->
-      <div class="flex items-center justify-center text-gray-600 font-semibold select-none text-lg pt-6">
-        ou
-      </div>
+
+
+    <!--div class="grid grid-cols-[1fr_auto_1fr] gap-2 sm:gap-6 mb-2 items-stretch"-->
+    <div class="relative grid grid-cols-2 gap-4 sm:gap-6 mb-2">
+     
+      <!-- Caixa A + contador -->
+      <!--div class="flex flex-col"-->
+      
+     <button 
+          @click="selectOption(currentPair.optionA.value)"
+          :class="['min-h-[96px] w-full py-4 px-3 border rounded-lg cursor-pointer select-none text-center transition text-sm sm:text-base flex items-center justify-center text-wrap whitespace-normal',
+          aiPriorities[currentIndex] === currentPair.optionA.value
+          ? 'bg-blue-100 border-blue-500'
+          : 'bg-gray-100 border-gray-300 hover:bg-gray-200'
+          ]">
+  {{ currentPair.optionA.label }}
+</button>
+
+      <!--/div-->
+
 
       <!-- Caixa B -->
-      <div class="flex flex-col items-center flex-1">
-        <button
+      <!--div class="flex flex-col"-->
+       <button 
           @click="selectOption(currentPair.optionB.value)"
-          class="flex-1 max-w-[45%] p-6 border rounded-lg cursor-pointer select-none text-center transition break-words bg-gray-100 border-gray-300 hover:bg-gray-200"
-        >
-          {{ currentPair.optionB.label }}
-        </button>
-      </div>
-    </div>
+          :class="['min-h-[96px] w-full py-4 px-3 border rounded-lg cursor-pointer select-none text-center transition text-sm sm:text-base flex items-center justify-center text-wrap whitespace-normal',
+          aiPriorities[currentIndex] === currentPair.optionB.value
+          ? 'bg-blue-100 border-blue-500'
+          : 'bg-gray-100 border-gray-300 hover:bg-gray-200'
+          ]">
+  {{ currentPair.optionB.label }}
+</button>
 
-    <!-- Botão Pular -->
-<div class="flex flex-col items-center gap-4 mb-6">
-  <button
-    v-if="currentIndex < pairs.length - 1"
-    @click="skip"
-    class="px-4 py-2 text-gray-600 hover:text-gray-900 cursor-pointer"
-  >
-    Pular
-  </button>
+      <!--/div-->
+    <!--/div-->
 
-  <button
-    v-if="currentIndex === pairs.length - 1"
-    @click="proceed"
-    class="btn-proceed"
-  >
-    Continuar
-  </button>
+         
+
+    <!-- Texto "ou" flutuando no centro -->
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-2 text-gray-600 font-semibold text-sm sm:text-base pointer-events-none">ou</div>
+        
 </div>
+
+<!-- Contador -->
+  <div class="text-xs sm:text-sm text-gray-500 mt-2 text-left">
+      {{ currentIndex + 1 }}/{{ pairs.length }}
+  </div>
+
+  <!--div class="flex justify-between items-center gap-4 mt-6 w-full max-w-full flex-nowrap flex-row px-2 sm:px-0">
+  <div class="flex flex-wrap justify-between gap-2 sm:gap-4 mt-6 w-full max-w-full px-2 sm:px-0"-->
 
 
 
     <!-- Botão Voltar -->
-    <div class="flex justify-start">
       <button
         @click="goBack"
-        class="btn-go-back"
-      >
+        class="flex-1 min-w-[48%] max-w-[140px]"
+        @mouseover="(e) => e.currentTarget.style.backgroundColor = '#E5E7EB'"
+        @mouseout="(e) => e.currentTarget.style.backgroundColor = '#F3F4F6'">
         Voltar
       </button>
-    </div>
-  </div>
+
+  
+
+    <!-- Botão Pular  (somente até o último par E se ainda não respondeu) -->
+    <button 
+    v-if="currentPending"
+    @click="skip"
+    :disabled="currentIndex === pairs.length -1 && currentAnswered"
+    class="flex-1 min-w-[48%] max-w-[140px]"
+    @mouseover="(e) => e.currentTarget.style.backgroundColor = '#E5E7EB'"
+    @mouseout="(e) => e.currentTarget.style.backgroundColor = '#F3F4F6'">
+      Pular
+    </button>
+
+    
+      
+
+   <!-- Botão Continuar  -->
+  <button
+    v-if="currentAnswered"
+    @click="proceed"
+    class="flex-1 min-w-[48%] max-w-[140px]"
+    @mouseover="(e) => e.currentTarget.style.backgroundColor = '#E5E7EB'"
+    @mouseout="(e) => e.currentTarget.style.backgroundColor = '#F3F4F6'">
+    Continuar
+  </button>
+</div>
+
+<pre>{{ surveyStore.data.aiPriorities }}</pre>
+<pre>currentIndex: {{ currentIndex }}</pre>
+<pre>currentAnswered: {{ currentAnswered }}</pre>
+   
+ 
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+
+import { ref, computed, watch, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
 import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
 
 const surveyStore = useSurveyStore()
-const { goBack, proceed: navigateNext } = useSurveyNavigation()
+const { goBack:goBackStep, proceed: navigateNext } = useSurveyNavigation()
+const router = useRouter()
+const route = useRoute()
+
+const aiPriorities = computed(() => 
+  Array.isArray(surveyStore.data.aiPriorities)
+    ? surveyStore.data.aiPriorities
+    : []
+)
+
 
 // Pares fixos por ora, depois pode vir do banco
 const pairs = [
@@ -103,38 +148,138 @@ const pairs = [
 ]
 
 const currentIndex = ref(0)
+
+// Inicializa array de respostas e índice no store se necessário
+onMounted(() => {
+  console.log('onMounted: route.query.index=', route.query.index)
+  console.log('onMounted: aiPrioritiesReturnFromNextStep=', surveyStore.data.aiPrioritiesReturnFromNextStep)
+  console.log('onMounted: aiPrioritiesIndex before logic=', surveyStore.data.aiPrioritiesIndex)
+
+
+  const storedAnswers = Array.isArray(surveyStore.data.aiPriorities)
+    ? surveyStore.data.aiPriorities
+    : []
+  const returnFromNext = surveyStore.data.aiPrioritiesReturnFromNextStep
+  let indexToStart = 0
+
+  if (route.query.index) {
+    const queryIndex = Number(route.query.index)
+    if (!isNaN(queryIndex) && queryIndex >= 0 && queryIndex < pairs.length) {
+      indexToStart = queryIndex
+    }
+  } else if (returnFromNext) {
+    // Se a flag está ativa, volta para o índice salvo no store
+    indexToStart = surveyStore.data.aiPrioritiesIndex ?? pairs.length - 1
+    // Reseta a flag para evitar loop infinito
+    surveyStore.updateData('aiPrioritiesReturnFromNextStep', false)
+  } else {
+    // Caso normal: vai para o primeiro índice incompleto ou zero
+    const firstIncompleteIndex = storedAnswers.findIndex(a => a === undefined)
+    indexToStart = firstIncompleteIndex !== -1 ? firstIncompleteIndex : 0
+  }
+
+  surveyStore.updateData('aiPrioritiesIndex', indexToStart)
+  currentIndex.value = indexToStart
+
+})
+
+watch(
+  () => route.query.index,
+  (newIndex) => {
+    if (newIndex !== undefined) {
+      const indexNumber = Number(newIndex)
+      if (!isNaN(indexNumber) && indexNumber >= 0 && indexNumber < pairs.length) {
+        currentIndex.value = indexNumber
+        surveyStore.updateData('aiPrioritiesIndex', indexNumber)
+      }
+    }
+  }
+)
+
+
+watch(currentIndex, (newIndex) => {
+  if (newIndex >= 0 && newIndex < pairs.length) {
+    surveyStore.updateData('aiPrioritiesIndex', newIndex)
+  }
+})
+
+
 const currentPair = computed(() => pairs[currentIndex.value])
 
-function selectOption(value: string) {
-  saveAnswer(value)
+// Verifica se a pergunta atual foi respondida (null é válido, undefined não)
+const currentAnswered = computed(() => {
+  const answers = surveyStore.data.aiPriorities
+  return Array.isArray(answers) && answers[currentIndex.value] !== undefined
+})
 
-  if (currentIndex.value < pairs.length - 1) {
-    currentIndex.value++
-  } else {
-    // Finalizou todas as perguntas
-    navigateNext()
-  }
-}
+// Verifica se todas as perguntas têm resposta (null ou string, mas não undefined)
+const allAnswered = computed(() => {
+  const answers = surveyStore.data.aiPriorities
+  return Array.isArray(answers) 
+  && answers.length === pairs.length 
+  && answers.every(a => a !== undefined)
+})
 
-function skip() {
-  saveAnswer(null)
- 
-  if (currentIndex.value < pairs.length - 1) {
-    currentIndex.value++
-  } else {
-    navigateNext()
-  }
-}
+const currentPending = computed(() => {
+  const answers = surveyStore.data.aiPriorities
+  if (!Array.isArray(answers)) return true
+  return answers[currentIndex.value] === undefined
+})
+
+
 
 function saveAnswer(value: string | null) {
-  // Cria uma cópia para evitar mutação direta
-  const currentAnswers = Array.isArray(surveyStore.data.aiPriorities) ? [...surveyStore.data.aiPriorities] : []
+  console.log('Saving:', value)
+  const currentAnswers = Array.isArray(surveyStore.data.aiPriorities) 
+  ? [...surveyStore.data.aiPriorities] 
+  : Array(pairs.length).fill(undefined)
+
   currentAnswers[currentIndex.value] = value
-  surveyStore.updateData('aiPriorities', currentAnswers)
+  surveyStore.updateArrayData('aiPriorities', currentAnswers)
 }
 
-// For the manual proceed button (when on last question)
+
+function selectOption(value: string) {
+  console.log('Option selected:', value)
+  saveAnswer(value)
+  if (currentIndex.value < pairs.length - 1) 
+    currentIndex.value++
+}  
+  
+
+function skip() {
+  saveAnswer('skipped')
+  if (currentIndex.value < pairs.length - 1) 
+    currentIndex.value++
+}  
+
+
 function proceed() {
-  navigateNext()
+  if (allAnswered.value){
+    surveyStore.updateData('aiPrioritiesIndex', currentIndex.value)
+    navigateNext()
+  }
 }
+
+
+function goBack() {
+  const currentIdx = surveyStore.data.aiPrioritiesIndex ?? 0
+  console.log('goBack: aiPrioritiesIndex=', currentIdx)
+  
+  if (currentIdx > 0) {
+    const prevIdx = currentIdx - 1
+    surveyStore.updateData('aiPrioritiesIndex', prevIdx)
+    surveyStore.updateData('aiPrioritiesReturnFromNextStep', true)
+    router.push({ path: '/ai-priorities', query: { index: prevIdx } })
+  } else {
+    // Aqui navega para a página anterior do survey
+    // Exemplo fixo, altere conforme sua navegação real:
+    router.push('/demographics-occupation')
+  }
+
+ 
+}
+
+
+
 </script>

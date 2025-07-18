@@ -49,7 +49,7 @@
       <!-- Navigation Buttons -->
       <div class="flex justify-between">
         <button 
-          @click="goBack" 
+          @click="goBackToPriorities" 
           class="btn-go-back flex items-center"
         >
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,8 +79,10 @@
 import { ref, onMounted } from 'vue'
 import { useSurveyStore } from '@/stores/survey'
 import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
+import { useRouter } from 'vue-router'
 
 const surveyStore = useSurveyStore()
+const router = useRouter()
 const { goBack, proceed: navigateNext } = useSurveyNavigation()
 const description = ref('')
 
@@ -95,6 +97,13 @@ function saveDescription() {
 function proceed() {
   saveDescription()
   navigateNext()
+}
+
+function goBackToPriorities() {
+  const lastIndex = surveyStore.data.aiPrioritiesIndex ?? 0
+  console.log('goBack: aiPrioritiesIndex=', lastIndex)
+  surveyStore.updateData('aiPrioritiesReturnFromNextStep', true)
+  router.push({ path: '/ai-priorities', query: { index: lastIndex } })
 }
 
 

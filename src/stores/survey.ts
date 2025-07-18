@@ -23,7 +23,9 @@ export interface SurveyData {
 
   }
 
-  aiPriorities?: (string | null)[]
+  aiPriorities?: (string | null | undefined)[]
+  aiPrioritiesIndex:0
+  aiPrioritiesReturnFromNextStep: false, 
   selectedSectors?: string[]       
   otherSector?: string    
 }
@@ -76,12 +78,20 @@ export const useSurveyStore = defineStore('survey', () => {
   // }
 
   function updateData(key: keyof SurveyData, value: any) {
-  if (typeof data.value[key] === 'object' && data.value[key] !== null && typeof value === 'object') {
-    data.value[key] = { ...data.value[key], ...value }
-  } else {
-    data.value[key] = value
+    if (typeof data.value[key] === 'object' && data.value[key] !== null && typeof value === 'object') {
+      data.value[key] = { ...data.value[key], ...value }
+    } else {
+      data.value[key] = value
+    }
   }
-}
+
+  function updateArrayData(key: keyof SurveyData, newArray: any[]) {
+    if (!Array.isArray(newArray)) {
+      console.warn(`updateArrayData: esperado array para a chave ${key}, mas recebeu:`, newArray);
+      return;
+    }
+    data.value[key] = [...newArray]; // cria cópia nova para reatividade
+  }
 
   function generateUniqueId(): string {
     const timestamp = Date.now().toString(36)              // Base36 timestamp
@@ -147,6 +157,7 @@ export const useSurveyStore = defineStore('survey', () => {
   function resetSurvey() {
     currentStep.value = 0
     data.value = {}
+    updateData('aiPrioritiesIndex', 0)
   }
 
   return {
@@ -160,6 +171,7 @@ export const useSurveyStore = defineStore('survey', () => {
     previousStep,
     goToStep,
     updateData,
+    updateArrayData,
     saveData,
     resetSurvey
   }
