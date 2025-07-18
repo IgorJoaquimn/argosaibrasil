@@ -9,8 +9,8 @@
         <label class="block text-lg font-medium text-primary mb-4">
           Como você se identifica?
         </label>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <br>
+        <div class="space-y-3">
           <label
             v-for="option in genderOptions"
             :key="option.value"
@@ -27,7 +27,6 @@
             <span>{{ option.label }}</span>
           </label>
         </div>
-
         <div v-if="demographics.gender === 'outro'" class="mt-4">
           <input
             type="text"

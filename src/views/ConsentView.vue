@@ -11,8 +11,8 @@
       <div class="mb-8">
 
 
-          <div class="bg-background-light border border-primary-200 rounded-lg px-8 py-8  max-h-[700px] overflow-y-auto md:max-h-none  md:overflow-visible">
-            <div class="text-primary-500 leading-relaxed space-y-4 px-4 text-justify">
+          <div class="bg-background-light border border-primary-200 rounded-lg px-8 py-8 max-h-[700px] overflow-y-auto md:max-h-none md:overflow-visible" style="padding-left:2.5rem;padding-right:2.5rem;">
+            <div class="text-primary-500 leading-relaxed space-y-4 text-justify">
               <p class="font-semibold text-lg pl-2">Seja bem-vindo(a)!</p>
 
 
@@ -27,28 +27,24 @@
             <p class="font-medium">Ao participar, <span style="font-weight: 700;">você está de acordo com os seguintes pontos</span>:</p>
             
             <ul class="space-y-3 pl-4">
-              <li class="flex items-start">
-                <span class="text-primary-400 mr-2 mt-1">•</span>
+              <li class="flex items-start gap-3">
+                <span class="text-primary-400 mt-1">•</span>
                 <span><span style="font-weight: 700;">A participação é voluntária</span> e você pode interromper o preenchimento a qualquer momento ou pular qualquer pergunta que não quiser responder.</span>
               </li>
-              
-              <li class="flex items-start">
-                <span class="text-primary-400 mr-2 mt-1">•</span>
+              <li class="flex items-start gap-3">
+                <span class="text-primary-400 mt-1">•</span>
                 <span><span style="font-weight: 700;">Nenhum dado pessoal será coletado</span>. As respostas serão usadas somente para fins de pesquisa acadêmica, e sempre de <span style="font-weight: 700;">forma anônima e agregada</span>.</span>
               </li>
-              
-              <li class="flex items-start">
-                <span class="text-primary-400 mr-2 mt-1">•</span>
+              <li class="flex items-start gap-3">
+                <span class="text-primary-400 mt-1">•</span>
                 <span>Todos os dados serão tratados de forma segura e em conformidade com a <span style="font-weight: 700;">Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018)</span>.</span>
               </li>
-              
-              <li class="flex items-start">
-                <span class="text-primary-400 mr-2 mt-1">•</span>
+              <li class="flex items-start gap-3">
+                <span class="text-primary-400 mt-1">•</span>
                 <span>Os resultados poderão ser utilizados em <span style="font-weight: 700;">análises, relatórios e publicações científicas</span>.</span>
               </li>
-              
-              <li class="flex items-start">
-                <span class="text-primary-400 mr-2 mt-1">•</span>
+              <li class="flex items-start gap-3">
+                <span class="text-primary-400 mt-1">•</span>
                 <span>Esta é uma <span style="font-weight: 700;">pesquisa de opinião pública com participantes não identificáveis</span>, e por isso está dispensada de avaliação pelo Comitê de Ética, conforme a Resolução CNS nº 510/2016, o Ofício Circular nº 17/2022/CONEP/SECNS/MS, e o artigo 26 da Resolução CNS nº 674/2022.</span>
               </li>
             </ul>

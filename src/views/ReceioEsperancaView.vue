@@ -1,38 +1,35 @@
 <template>
   <div class="max-w-4xl mx-auto p-6">
     <div class="bg-white rounded-lg shadow-md p-8">
-      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Preocupações e Expectativas</h2>
+      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center py-6">Preocupações e Expectativas</h2>
       
       <!-- Seus receios -->
       <section class="mb-10">
         <h3 class="text-xl font-semibold text-gray-900 mb-2 text-left">Suas preocupações em relação à IA:</h3>
         <label for="fear-scale" class="block mb-1 text-gray-700 text-left">
-          Em uma escala de 1 a 5, quanto você se <span style="font-weight: 700;">sente preocupado(a) </span> com os riscos da IA?
+          Em uma escala de 0 a 100, quanto você se <span style="font-weight: 700;">sente preocupado(a) </span> com os riscos da IA?
         </label>
+
         <input 
           id="fear-scale" 
           type="range" 
-          min="1" max="5" step="1" 
+          min="0" max="100" step="1" 
           v-model="fearScale"
           class="w-full"
           @input="saveFears"
         />
-        <div class="grid grid-cols-5 justify-between text-sm text-gray-600 mt-1 px-1 select-none">
-          <span class="text-center">1</span>
-          <span class="text-center">2</span>
-          <span class="text-center">3</span>
-          <span class="text-center">4</span>
-          <span class="text-center">5</span>
+        <div class="w-full flex justify-between text-sm text-gray-600 mt-1 px-1 select-none">
+          <span class="text-left">0</span>
+          <span class="text-right">100</span>
+        </div>
+        <div class="w-full flex justify-between mt-2">
+          <span class="text-center">Sem receio nenhum</span>
+          <span class="text-lg font-bold text-blue-700 bg-gray0 px-3 py-1 rounded shadow">{{ fearScale }}</span>
+          <span class="text-center">Muito receoso(a)</span>
         </div>
 
 <!-- Textos abaixo dos números -->
-<div class="grid grid-cols-5 text-[0.7rem] text-gray-500 mt-1 px-1 select-none">
-  <span class="text-center">Sem receio nenhum</span>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span class="text-center">Muito receoso(a)</span>
-</div> <br>
+      <br>
         <textarea
           v-model="fearText"
           @input="saveFears"
@@ -48,32 +45,34 @@
       <section>
         <h3 class="text-xl font-semibold text-gray-900 mb-2 text-left">Suas esperanças em relação à IA:</h3>
         <label for="hope-scale" class="block mb-1 text-gray-700 text-left">
-          Em uma escala de 1 a 5, quanto você se <span style="font-weight: 700;">sente otimista</span> sobre os benefícios da IA?
+          Em uma escala de 0 a 100, quanto você se <span style="font-weight: 700;">sente otimista</span> sobre os benefícios da IA?
         </label>
         <input 
           id="hope-scale" 
           type="range" 
-          min="1" max="5" step="1" 
+          min="0" max="100" step="1" 
           v-model="hopeScale"
           class="w-full"
           @input="saveHopes"
         />
-       <div class="grid grid-cols-5 justify-between text-sm text-gray-600 mt-1 px-1 select-none">
-  <span class="text-center">1</span>
-  <span class="text-center">2</span>
-  <span class="text-center">3</span>
-  <span class="text-center">4</span>
-  <span class="text-center">5</span>
-</div>
+        <div class="w-full flex justify-between text-sm text-gray-600 mt-1 px-1 select-none">
+          <span class="text-left">0</span>
+          <span class="text-right">100</span>
+        </div>
+        <div class="w-full flex justify-between mt-2">
+          <span class="text-center">Sem esperança alguma</span>
+          <span class="text-lg font-bold text-blue-700 bg-gray-100 px-3 py-1 rounded shadow">{{ hopeScale }}</span>
+          <span class="text-center">Cheio(a) de esperança</span>
+        </div>
 
-<!-- Textos abaixo dos números -->
-<div class="grid grid-cols-5 text-[0.7rem] text-gray-500 mt-1 px-1 select-none">
-  <span class="text-center">Sem esperança alguma</span>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span class="text-center">Cheio(a) de esperança</span>
-</div>
+        <!-- Textos abaixo dos números -->
+        <!-- <div class="grid grid-cols-5 text-base text-gray-900 mt-1 px-1 select-none">
+          <span class="text-center">Sem esperança alguma</span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span class="text-center">Cheio(a) de esperança</span>
+        </div> -->
         <br>
         <textarea
           v-model="hopeText"
@@ -113,8 +112,8 @@ import { useSurveyStore } from '@/stores/survey'
 const router = useRouter()
 const surveyStore = useSurveyStore()
 
-const fearScale = ref(3)
-const hopeScale = ref(3)
+const fearScale = ref(0)
+const hopeScale = ref(0)
 const fearText = ref('')
 const hopeText = ref('')
 
@@ -122,8 +121,9 @@ const hopeText = ref('')
 
 onMounted(() => {
   const data = surveyStore.data.receiosEesperancas || {}
-  fearScale.value = data.fearScale ?? 3
-  hopeScale.value = data.hopeScale ?? 3
+  // Only set the values if they are numbers, otherwise leave as default
+  if (typeof data.fearScale === 'number') fearScale.value = data.fearScale
+  if (typeof data.hopeScale === 'number') hopeScale.value = data.hopeScale
   fearText.value = data.receios || ''
   hopeText.value = data.esperancas || ''
 })
@@ -132,13 +132,16 @@ onMounted(() => {
 
 
 
+
 function saveFears() {
   const current = surveyStore.data.receiosEesperancas || {}
+  // Only update fearScale, not hopeScale
   surveyStore.updateData('receiosEesperancas', { ...current, receios: fearText.value, fearScale: fearScale.value })
 }
 
 function saveHopes() {
   const current = surveyStore.data.receiosEesperancas || {}
+  // Only update hopeScale, not fearScale
   surveyStore.updateData('receiosEesperancas', { ...current, esperancas: hopeText.value, hopeScale: hopeScale.value })
 }
 
@@ -172,11 +175,12 @@ input[type='range'] {
   width: 100%;
   height: 8px;
   border-radius: 5px;
-  background: #d1d5db; /* cinza claro */
+  background: #d1d5db;
   outline: none;
   margin-top: 4px;
   margin-bottom: 4px;
   cursor: pointer;
+  transition: background 0.2s;
 }
 
 input[type='range']::-webkit-slider-thumb {
@@ -185,26 +189,44 @@ input[type='range']::-webkit-slider-thumb {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #2563eb; /* azul */
+  background: #2563eb;
   cursor: pointer;
-  margin-top: -7px; /* alinhar no centro da barra */
-  transition: background-color 0.3s ease;
+  margin-top: -7px;
+  transition: background-color 0.3s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.15);
 }
-
-input[type='range']::-webkit-slider-thumb:hover {
+input[type='range']:active::-webkit-slider-thumb {
   background: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.25);
 }
-
 input[type='range']::-moz-range-thumb {
   width: 22px;
   height: 22px;
   border-radius: 50%;
   background: #2563eb;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.15);
 }
-
-input[type='range']::-moz-range-thumb:hover {
+input[type='range']:active::-moz-range-thumb {
   background: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+}
+input[type='range']::-ms-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #2563eb;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.15);
+}
+input[type='range']:active::-ms-thumb {
+  background: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+}
+input[type='range']:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #2563eb44;
 }
 </style>
