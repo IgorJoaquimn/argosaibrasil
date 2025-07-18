@@ -7,10 +7,12 @@
           
           <img alt="Argos IA Brasil" src="@/assets/logo_argos.png" class="w-[100px] h-[100px]" />
 
-          <h1 class="text-xl font-mono font-semibold text-primary-500">
+          <h1 class="text-2xl sm:text-3xl lg:text-4xl font-semibold text-primary-500">
             Argos IA Brasil
           </h1>
         </div>
+
+      
 
         <!-- Navigation Section (Right) -->
         <nav class="flex items-center gap-4">

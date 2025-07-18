@@ -7,7 +7,7 @@
       <section class="mb-10">
         <h3 class="text-xl font-semibold text-gray-900 mb-2 text-left">Suas preocupações em relação à IA:</h3>
         <label for="fear-scale" class="block mb-1 text-gray-700 text-left">
-          Em uma escala de 1 a 5, quanto você se sente preocupado(a) com os riscos da IA?
+          Em uma escala de 1 a 5, quanto você se <span style="font-weight: 700;">sente preocupado(a) </span> com os riscos da IA?
         </label>
         <input 
           id="fear-scale" 
@@ -48,7 +48,7 @@
       <section>
         <h3 class="text-xl font-semibold text-gray-900 mb-2 text-left">Suas esperanças em relação à IA:</h3>
         <label for="hope-scale" class="block mb-1 text-gray-700 text-left">
-          Em uma escala de 1 a 5, quanto você se sente otimista sobre os benefícios da IA?
+          Em uma escala de 1 a 5, quanto você se <span style="font-weight: 700;">sente otimista</span> sobre os benefícios da IA?
         </label>
         <input 
           id="hope-scale" 

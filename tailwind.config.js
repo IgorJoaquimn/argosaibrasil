@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
+  safelist: ['border-red-500'],
   theme: {
     extend: {
       colors: {
@@ -15,6 +16,7 @@ export default {
       'border-light': '#e5e7eb',
       'border-medium': '#d1d5db',
       'border-dark': '#9ca3af',
+      'custom-red': '#ef4444',
     },
     },
   },
