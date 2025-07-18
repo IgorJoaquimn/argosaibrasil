@@ -2,22 +2,17 @@
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="bg-background rounded-xl p-6 lg:p-8">
     <br>
-      <h1 class="text-lg sm:text-2xl lg:text-4xl font-semibold text-primary-500 mb-6">
-        Termo de Consentimento
+    <h1 class="text-base sm:text-lg lg:text-4xl font-semibold text-primary-500">
+    Termo de Consentimento</h1>
 
-
- 
-
-        
-      </h1>
       <br>
       <br>
       <!-- Consent Text Box -->
       <div class="mb-8">
 
 
-          <div class="bg-background-light border border-primary-200 rounded-lg px-6 py-8  max-h-[700px] overflow-y-auto md:max-h-none  md:overflow-visible">
-            <div class="text-primary-500 leading-relaxed space-y-4 px-4">
+          <div class="bg-background-light border border-primary-200 rounded-lg px-8 py-8  max-h-[700px] overflow-y-auto md:max-h-none  md:overflow-visible">
+            <div class="text-primary-500 leading-relaxed space-y-4 px-4 text-justify">
               <p class="font-semibold text-lg pl-2">Seja bem-vindo(a)!</p>
 
 
