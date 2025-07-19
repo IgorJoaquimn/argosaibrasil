@@ -16,7 +16,7 @@ app.use(pinia)
 app.use(router)
 
 // Initialize auto-save functionality 
-// setupAutoSave(router) // Uncomment this line to enable auto-save on route changes
+setupAutoSave(router) // Uncomment this line to enable auto-save on route changes
 
 app.mount('#app')
 
