@@ -11,7 +11,9 @@
         <span class="text-sm text-gray-500">(Marque de 1 a 3 opções)</span>
       </p>
 
-      <!-- Lista em grade com dois checkboxes por linha -->
+      
+
+      
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 mb-6">
         <div
           v-for="(context, index) in contexts"
@@ -23,10 +25,9 @@
             :id="context.value"
             :value="context.value"
             v-model="selectedContexts"
-            class="w-5 h-5 mt-1 text-blue-600 border-gray-300 rounded"
-            :disabled="!safeSelectedContexts.includes(context.value) && safeSelectedContexts.length >= 3"
-
-          />
+            :checked="selectedContexts.includes(context.value)"
+            @change="(e) => toggleCheckbox(context.value, e.target.checked)"
+            class="w-5 h-5 mt-1 text-blue-600 border-gray-300 rounded"/>
           <label
             :for="context.value"
             class="text-gray-800 text-base cursor-pointer select-none break-words"
@@ -54,15 +55,15 @@
       </div>
 
       <div class="flex justify-between mt-6">
-        <button @click="goBack" class="btn-go-back">Voltar</button>
-        <button @click="proceed" :disabled="!canProceed" class="btn-proceed">Continuar</button>
+        <button @click="handleGoBack" class="btn-go-back">Voltar</button>
+        <button @click="proceed" class="btn-proceed">Continuar</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useSurveyStore } from '@/stores/survey'
 import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
 
@@ -71,6 +72,40 @@ const { goBack, proceed: navigateNext } = useSurveyNavigation()
 
 const selectedContexts = ref<string[]>([])
 const otherText = ref('')
+
+
+
+onMounted(() => {
+  // Garante que selectedContexts seja array simples, convertendo Proxy se necessário
+  if (surveyStore.data.selectedSectors) {
+    const stored = surveyStore.data.selectedSectors
+    selectedContexts.value = Array.isArray(stored)
+      ? [...stored]
+      : Object.values(stored)
+  } else {
+    selectedContexts.value = []
+  }
+
+  if (surveyStore.data.otherSector) {
+    otherText.value = surveyStore.data.otherSector
+  }
+})
+
+
+
+
+// Atualiza o store quando selectedContexts muda
+watch(selectedContexts, (newVal) => {
+  surveyStore.updateData('selectedSectors', newVal)
+}, { deep: true, flush: 'sync' })
+
+// Atualiza o store quando otherText muda, só se 'outros' estiver selecionado
+watch(otherText, (newVal) => {
+  if (selectedContexts.value.includes('outros')) {
+    surveyStore.updateData('otherSector', newVal)
+  }
+}, { flush: 'sync' })
+
 
 const contexts = [
   { value: 'economia', title: 'Economia' },
@@ -87,49 +122,39 @@ const contexts = [
   { value: 'outros', title: 'Outros' }
 ]
 
-const safeSelectedContexts = computed(() => 
-  Array.isArray(selectedContexts.value) ? selectedContexts.value : []
-)
+//const safeSelectedContexts = computed(() => 
+  //Array.isArray(selectedContexts.value) ? selectedContexts.value : []
+//)
 
-const canProceed = computed(() => 
-  selectedContexts.value.length > 0 && selectedContexts.value.length <= 3
-)
+//const canProceed = computed(() => selectedContexts.value.length <= 3)
 
-onMounted(() => {
-  // Só sobrescreve se ainda não estiver setado
-  if (selectedContexts.value.length === 0 && Array.isArray(surveyStore.data.selectedSectors)) {
-    selectedContexts.value = [...surveyStore.data.selectedSectors]
+function toggleCheckbox(value: string, checked: boolean) {
+  if (checked) {
+    if (selectedContexts.value.length < 3 && !selectedContexts.value.includes(value)) {
+      selectedContexts.value.push(value)
+    }
+  } else {
+    const index = selectedContexts.value.indexOf(value)
+    if (index !== -1) {
+      selectedContexts.value.splice(index, 1)
+    }
   }
-  if (!otherText.value && typeof surveyStore.data.otherSector === 'string') {
-    otherText.value = surveyStore.data.otherSector
-  }
-})
+}
 
-// Atualiza o store sempre que selectedContexts mudar
-watch(selectedContexts, (newVal) => {
-  if (JSON.stringify(newVal) !== JSON.stringify(surveyStore.data.selectedSectors)) {
-    surveyStore.updateData('selectedSectors', newVal)
-  }
-}, { deep: true, flush: 'sync' })
-
-// Atualiza o store com o texto dos "outros"
-watch(otherText, (newVal) => {
-  if (selectedContexts.value.includes('outros')) {
-    surveyStore.updateData('otherSector', newVal)
-  }
-},{ flush: 'sync' })
 
 function proceed() {
   // salva manualmente ANTES de navegar
   surveyStore.updateData('selectedSectors', selectedContexts.value)
   surveyStore.updateData('otherSector', otherText.value)
   navigateNext()
+  //console.log('Selected Sectors in store:', surveyStore.data.selectedSectors)
+  
 }
 
-function goBackAndSave() {
+function handleGoBack() {
   surveyStore.updateData('selectedSectors', selectedContexts.value)
   surveyStore.updateData('otherSector', otherText.value)
-  goBack()
+  goBack()  // chama a função importada para navegar
 }
 
 </script>

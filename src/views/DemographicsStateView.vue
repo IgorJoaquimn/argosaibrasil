@@ -9,7 +9,7 @@
         <label class="block text-lg font-medium text-primary mb-4">
           Em que estado você reside?
         </label>
-<br>
+
         <select
           v-model="demographics.state"
           @change="saveDemographics"

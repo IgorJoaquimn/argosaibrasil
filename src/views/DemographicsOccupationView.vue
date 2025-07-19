@@ -9,7 +9,7 @@
         <label class="block text-lg font-medium text-primary mb-4">
           Qual a sua ocupação principal?
         </label>
-        <br>
+  
 
         <div class="space-y-3">
           <label
@@ -42,20 +42,8 @@
       </div>
 <br><br>
       <div class="flex justify-between">
-        <button
-          @click="goBack"
-          class="btn-go-back"
-        >
-          Voltar
-        </button>
-
-        <button
-          @click="proceed"
-          :disabled="!canProceed"
-          class="btn-proceed"
-        >
-          Continuar
-        </button>
+        <button @click="goBack" class="btn-go-back">Voltar </button>
+        <button @click="proceed" :disabled="!canProceed" class="btn-proceed">Continuar</button>
       </div>
     </div>
   </div>

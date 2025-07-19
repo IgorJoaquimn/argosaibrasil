@@ -26,8 +26,8 @@ export interface SurveyData {
   aiPriorities?: (string | null | undefined)[]
   aiPrioritiesIndex:0
   aiPrioritiesReturnFromNextStep: false, 
-  selectedSectors?: string[]       
-  otherSector?: string    
+  selectedSectors: []       
+  otherSector: ''    
 }
 
 

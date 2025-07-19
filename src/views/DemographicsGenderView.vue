@@ -9,7 +9,7 @@
         <label class="block text-lg font-medium text-primary mb-4">
           Como você se identifica?
         </label>
-        <br>
+        
         <div class="space-y-3">
           <label
             v-for="option in genderOptions"

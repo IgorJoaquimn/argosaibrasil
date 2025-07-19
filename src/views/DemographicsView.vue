@@ -9,7 +9,7 @@
       <label class="block text-lg font-medium text-primary mb-4">
         Qual é a sua faixa etária?
       </label>
-      <br>
+     
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <label
           v-for="option in ageOptions"

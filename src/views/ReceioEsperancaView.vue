@@ -22,14 +22,17 @@
         </div>
 
   <div class="w-full mt-2 flex items-center justify-between text-sm text-gray-700">
-  <span class="text-left">Sem receio nenhum</span>
+  <span class="text-left">Nenhuma preocupação</span>
   <span class="text-lg font-bold text-blue-700 bg-gray-100 px-3 py-1 rounded shadow text-center">{{ fearScale }}</span>
-  <span class="text-right">Muito receoso(a)</span>
+  <span class="text-right">Extremamente preocupado(a)</span>
 </div>
 
 
 <!-- Textos abaixo dos números -->
-      <br>
+      <label for="fear-Text" class="block mb-1 text-gray-700 text-left">
+         O que mais te <span style="font-weight: 700;">preocupa</span> em relação à IA?
+        </label>
+
         <textarea
           v-model="fearText"
           @input="saveFears"
@@ -39,7 +42,7 @@
         ></textarea>
       </section>
 
-      <br>
+   
       
       
       <section>
@@ -62,17 +65,19 @@
         </div>
 
         <div class="w-full mt-2 flex items-center justify-between text-sm text-gray-700">
-          <span class="text-left">Sem esperança alguma</span>
+          <span class="text-left">Nada otimista</span>
           <span class="text-lg font-bold text-blue-700 bg-gray-100 px-3 py-1 rounded shadow text-center">{{ hopeScale }}</span>
-          <span class="text-right">Cheio(a) de esperança</span>
+          <span class="text-right">Muito otimista</span>
         </div>
 
 
-
+      <br>
 
         <!-- Textos abaixo dos números -->
         
-        <br>
+        <label for="hopeText" class="block mb-1 text-gray-700 text-left">
+          O que mais te deixa <span style="font-weight: 700;">otimista</span> em relação à IA?
+        </label>
         <textarea
           v-model="hopeText"
           @input="saveHopes"
@@ -87,7 +92,7 @@
      <!-- Botões -->
       <div class="flex justify-between mt-6">
         <button @click="goBack" class="btn-go-back">Voltar</button>
-        <button @click="proceed" :disabled="!canProceed" class="btn-proceed">
+        <button @click="proceed" class="btn-proceed">
         Continuar</button>
       </div>
     </div>
