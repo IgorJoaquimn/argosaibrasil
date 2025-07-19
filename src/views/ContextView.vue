@@ -24,10 +24,10 @@
             type="checkbox"
             :id="context.value"
             :value="context.value"
-            v-model="selectedContexts"
             :checked="selectedContexts.includes(context.value)"
+            :disabled="selectedContexts.length >= 3 && !selectedContexts.includes(context.value)"
             @change="(e) => onCheckboxChange(e, context.value)"
-            class="w-5 h-5 mt-1 text-blue-600 border-gray-300 rounded"/>
+            class="w-5 h-5 mt-1 text-blue-600 border-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed"/>
           <label
             :for="context.value"
             class="text-gray-800 text-base cursor-pointer select-none break-words"
@@ -131,19 +131,22 @@ const contexts = [
 function onCheckboxChange(e: Event, value: string) {
   const target = e.target as HTMLInputElement | null
   if (target) {
-    toggleCheckbox(value, target.checked)
-  }
-}
-
-function toggleCheckbox(value: string, checked: boolean) {
-  if (checked) {
-    if (selectedContexts.value.length < 3 && !selectedContexts.value.includes(value)) {
-      selectedContexts.value.push(value)
-    }
-  } else {
-    const index = selectedContexts.value.indexOf(value)
-    if (index !== -1) {
-      selectedContexts.value.splice(index, 1)
+    if (target.checked) {
+      // Only allow checking if we have less than 3 selected or if this item is already selected
+      if (selectedContexts.value.length < 3) {
+        if (!selectedContexts.value.includes(value)) {
+          selectedContexts.value.push(value)
+        }
+      } else {
+        // Prevent checking if we already have 3 items
+        target.checked = false
+      }
+    } else {
+      // Allow unchecking
+      const index = selectedContexts.value.indexOf(value)
+      if (index !== -1) {
+        selectedContexts.value.splice(index, 1)
+      }
     }
   }
 }
