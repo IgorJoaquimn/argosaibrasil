@@ -2,19 +2,17 @@
   <div class="max-w-4xl mx-auto">
     <div class="bg-white rounded-lg shadow-md p-8 text-center">
       <div class="mb-5">
-        
 
-      <!-- Ícone de sucesso (verde) reduzido -->
 
-<br>
-        
+        <!-- Ícone de sucesso (verde) reduzido -->
+
         <h2 class="text-3xl font-bold text-gray-900 mb-4">Questionário concluído!</h2>
-        <br>
-        <p class="text-lg text-gray-700 mb-6">
-          Obrigado por participar do nosso questionário sobre o futuro da IA no Brasil. Suas respostas são valiosas para compreendermos as percepções sobre IA no país.
+        <p class="text-lg text-gray-700 mb-2">
+          Obrigado por participar do nosso questionário sobre o futuro da IA no Brasil. Suas respostas são valiosas para
+          compreendermos as percepções sobre IA no país.
         </p>
       </div>
-      
+
       <!--div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
         <h3 class="text-xl font-semibold text-blue-900 mb-3">What happens next?</h3>
         <div class="text-blue-700 space-y-2">
@@ -25,28 +23,24 @@
         </div>
       </div-->
 
-      <pre class="text-left text-xs bg-gray-100 p-4 rounded mt-4">
+      <!-- <pre class="text-left text-xs bg-gray-100 p-4 rounded mt-4">
   {{ JSON.stringify(surveyStore.data, null, 2) }}
 </pre>
-      
+
       <div class="bg-gray-50 rounded-lg p-6 mb-8">
-        
+
         <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-600">
-          
-         
+
+
           <div>
             <span class="font-medium">Completion Date:</span>
             {{ new Date().toLocaleDateString('pt-BR') }}
           </div>
-          <!--div>
-            <span class="font-medium">Response ID:</span>
-            {{ responseId }}
-          </div-->
         </div>
-      </div>
-      
-     
-      
+      </div> -->
+
+
+
       <div class="mt-8 pt-6 border-t border-gray-200">
         <p class="text-sm text-gray-500">
           Em caso de dúvidas sobre esta pesquisa, entre em contato:
@@ -81,7 +75,7 @@ function downloadData() {
     completionDate: new Date().toISOString(),
     responses: surveyStore.data
   }
-  
+
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')

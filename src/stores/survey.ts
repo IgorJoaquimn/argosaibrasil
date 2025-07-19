@@ -27,7 +27,9 @@ export interface SurveyData {
   aiPrioritiesIndex: number
   aiPrioritiesReturnFromNextStep: boolean, 
   selectedSectors: string[]       
-  otherSector: string    
+  otherSector: string
+  desistiu?: boolean
+  incompleto?: boolean
 }
 
 
@@ -174,6 +176,30 @@ function updateArrayData(key: keyof SurveyData, newArray: any[]) {
     
   }
 
+  async function abandonSurvey() {
+    try {
+      // Set desistiu flag and clear other data except this flag
+      resetSurvey()
+      data.value.desistiu = true
+      // Save the data with the desistiu flag
+      await saveData()
+      resetSurvey()
+      } catch (error) {
+      console.error('Error abandoning survey:', error)
+    }
+  }
+
+  async function finishIncomplete() {
+    try {
+      // Set incompleto flag and save current data
+      data.value.incompleto = true
+      await saveData()
+      resetSurvey()
+    } catch (error) {
+      console.error('Error finishing incomplete survey:', error)
+    }
+  }
+
   return {
     currentStep,
     data,
@@ -187,7 +213,9 @@ function updateArrayData(key: keyof SurveyData, newArray: any[]) {
     updateData,
     updateArrayData,
     saveData,
-    resetSurvey
+    resetSurvey,
+    abandonSurvey,
+    finishIncomplete
   }
 }, {
   persist: true
