@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
 import ConsentView from '@/views/ConsentView.vue'
 import ContextView from '@/views/ContextView.vue'
@@ -14,7 +14,7 @@ import CompletedView from '@/views/CompletedView.vue'
 import SurveySummary from '@/views/SurveySummary.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
