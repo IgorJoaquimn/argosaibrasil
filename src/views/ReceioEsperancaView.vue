@@ -91,68 +91,84 @@
 
      <!-- Botões -->
       <div class="flex justify-between mt-6">
-        <button @click="goBack" class="btn-go-back">Voltar</button>
-        <button @click="proceed" class="btn-proceed">
-        Continuar</button>
+        <button @click="goBackHandler" class="btn-go-back">Voltar</button>
+        <button @click="proceed" class="btn-proceed">Continuar</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
 import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
 
 const surveyStore = useSurveyStore()
 const { goBack, proceed: navigateNext } = useSurveyNavigation()
+const route = useRoute()
 
 const fearScale = ref(0)
 const hopeScale = ref(0)
 const fearText = ref('')
 const hopeText = ref('')
 
-
-
-onMounted(() => {
+function loadData() {
   const data = surveyStore.data.receiosEesperancas || {}
-  // Only set the values if they are numbers, otherwise leave as default
-  if (typeof data.fearScale === 'number') fearScale.value = data.fearScale
-  if (typeof data.hopeScale === 'number') hopeScale.value = data.hopeScale
+  fearScale.value = typeof data.fearScale === 'number' ? data.fearScale : 0
+  hopeScale.value = typeof data.hopeScale === 'number' ? data.hopeScale : 0
   fearText.value = data.receios || ''
   hopeText.value = data.esperancas || ''
+  console.log(fearScale.value, hopeScale.value)
+}
+
+onMounted(() => {
+  loadData()
 })
 
-
-
-
+watch(() => route.fullPath, () => {
+  loadData()
+})
 
 
 function saveFears() {
   const current = surveyStore.data.receiosEesperancas || {}
-  // Only update fearScale, not hopeScale
-  surveyStore.updateData('receiosEesperancas', { ...current, receios: fearText.value, fearScale: fearScale.value })
+  const newData = { 
+    ...current, 
+    receios: fearText.value, 
+    fearScale: Number(fearScale.value)  // forçar número
+  }
+  surveyStore.updateData('receiosEesperancas', newData)
+  console.log('Salvando receios:', newData)
+ 
 }
 
 function saveHopes() {
   const current = surveyStore.data.receiosEesperancas || {}
-  // Only update hopeScale, not fearScale
-  surveyStore.updateData('receiosEesperancas', { ...current, esperancas: hopeText.value, hopeScale: hopeScale.value })
+  const newData = { 
+    ...current, 
+    esperancas: hopeText.value, 
+    hopeScale: Number(hopeScale.value)  // forçar número
+  }
+  surveyStore.updateData('receiosEesperancas', newData)
+  console.log('Salvando esperancas:', newData)
+ 
 }
 
 
-const canProceed = computed(() => {
-  return fearText.value.trim().length > 0 || hopeText.value.trim().length > 0
-})
+//const canProceed = computed(() => {
+  //return fearText.value.trim().length > 0 || hopeText.value.trim().length > 0
+//})
 
 function proceed() {
-  if(canProceed.value){
+  //if(canProceed.value){
     navigateNext()
-  }
+  //}
 }
 
-
-
+function goBackHandler() {
+  goBack()
+}
 
 
 </script>
