@@ -14,7 +14,7 @@ import CompletedView from '@/views/CompletedView.vue'
 import SurveySummary from '@/views/SurveySummary.vue'
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/',
