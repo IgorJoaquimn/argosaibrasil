@@ -35,7 +35,7 @@ export interface SurveyData {
 
 export const useSurveyStore = defineStore('survey', () => {
   const currentStep = ref(0)
-  const data = ref<SurveyData>({
+  const data = ref<Partial<SurveyData>>({
       aiPrioritiesIndex: 0,
       aiPrioritiesReturnFromNextStep: false,
       selectedSectors: [],
@@ -83,22 +83,23 @@ export const useSurveyStore = defineStore('survey', () => {
   // }
 
 function updateData(key: keyof SurveyData, value: any) {
-  if (typeof data.value[key] === 'object' && data.value[key] !== null && typeof value === 'object') {
-      // Usar cast para evitar erro TS2322
-      data.value[key] = { ...(data.value[key] as object), ...value } as any
-  } 
-  else {
-    data.value[key] = value as any
+  if (
+    typeof data.value[key] === 'object' &&
+    data.value[key] !== null &&
+    typeof value === 'object'
+  ) {
+    data.value[key] = { ...(data.value[key] as object), ...value } as any
+  } else {
+    (data.value as any)[key] = value
   }
 }
 
 function updateArrayData(key: keyof SurveyData, newArray: any[]) {
   if (!Array.isArray(newArray)) {
-    console.warn(`updateArrayData: esperado array para a chave ${key}, mas recebeu:`, newArray);
-    return;
+    console.warn(`updateArrayData: esperado array para a chave ${key}, mas recebeu:`, newArray)
+    return
   }
-  // Cast para contornar erro TS2322
-  data.value[key] = [...newArray] as any
+  ;(data.value as any)[key] = [...newArray]
 }
 
   function generateUniqueId(): string {
