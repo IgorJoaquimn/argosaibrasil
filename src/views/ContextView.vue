@@ -26,7 +26,7 @@
             :value="context.value"
             v-model="selectedContexts"
             :checked="selectedContexts.includes(context.value)"
-            @change="(e) => toggleCheckbox(context.value, e.target.checked)"
+            @change="(e) => onCheckboxChange(e, context.value)"
             class="w-5 h-5 mt-1 text-blue-600 border-gray-300 rounded"/>
           <label
             :for="context.value"
@@ -127,6 +127,13 @@ const contexts = [
 //)
 
 //const canProceed = computed(() => selectedContexts.value.length <= 3)
+
+function onCheckboxChange(e: Event, value: string) {
+  const target = e.target as HTMLInputElement | null
+  if (target) {
+    toggleCheckbox(value, target.checked)
+  }
+}
 
 function toggleCheckbox(value: string, checked: boolean) {
   if (checked) {
