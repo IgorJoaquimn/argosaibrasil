@@ -30,13 +30,6 @@ export interface SurveyData {
   otherSector: string    
 }
 
-const data = ref<SurveyData>({
-  aiPrioritiesIndex: 0,
-  aiPrioritiesReturnFromNextStep: false,
-  selectedSectors: [],
-  otherSector: '',
-})
-
 
 
 
@@ -85,12 +78,12 @@ export const useSurveyStore = defineStore('survey', () => {
   // }
 
   function updateData(key: keyof SurveyData, value: any) {
-    if (typeof data.value[key] === 'object' && data.value[key] !== null && typeof value === 'object') {
-      data.value[key] = { ...data.value[key], ...value }
-    } else {
-      data.value[key] = value
-    }
+  if (typeof data.value[key] === 'object' && data.value[key] !== null && typeof value === 'object') {
+    data.value[key] = { ...data.value[key], ...value } as any
+  } else {
+    data.value[key] = value as any
   }
+}
 
   function updateArrayData(key: keyof SurveyData, newArray: any[]) {
     if (!Array.isArray(newArray)) {
@@ -169,7 +162,7 @@ export const useSurveyStore = defineStore('survey', () => {
     selectedSectors: [],
     otherSector: '',
     }
-    updateData('aiPrioritiesIndex', 0)
+    
   }
 
   return {

@@ -58,10 +58,7 @@
       <!-- Botão Voltar -->
       <button
         @click="goBack"
-        class="flex-1 basis-[48%] sm:basis-auto sm:max-w-[140px] bg-gray-200 text-gray-700 rounded-md font-medium transition-colors duration-150 border-none cursor-pointer hover:bg-gray-300 py-3 px-6 text-sm"
-        @mouseover="(e) => (e.currentTarget.style.backgroundColor = '#E5E7EB')"
-        @mouseout="(e) => (e.currentTarget.style.backgroundColor = '#F3F4F6')"
-      >
+        class="flex-1 basis-[48%] sm:basis-auto sm:max-w-[140px] bg-gray-200 text-gray-700 rounded-md font-medium transition-colors duration-150 border-none cursor-pointer hover:bg-gray-300 py-3 px-6 text-sm">
         Voltar
       </button>
 
