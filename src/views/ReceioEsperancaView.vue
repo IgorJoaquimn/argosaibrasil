@@ -139,7 +139,7 @@ function saveFears() {
     fearScale: Number(fearScale.value)  // forçar número
   }
   surveyStore.updateData('receiosEesperancas', newData)
-  console.log('Salvando receios:', newData)
+  //console.log('Salvando receios:', newData)
  
 }
 
@@ -151,7 +151,7 @@ function saveHopes() {
     hopeScale: Number(hopeScale.value)  // forçar número
   }
   surveyStore.updateData('receiosEesperancas', newData)
-  console.log('Salvando esperancas:', newData)
+  //console.log('Salvando esperancas:', newData)
  
 }
 

@@ -18,17 +18,24 @@ export interface SurveyData {
     customGender?: string  
     state?: string
     occupation?: string
-    profession?: string          // ADICIONE esta linha
-    otherProfession?: string     // ADICIONE esta linha
+    profession?: string         
+    otherProfession?: string   
 
   }
 
   aiPriorities?: (string | null | undefined)[]
-  aiPrioritiesIndex:0
-  aiPrioritiesReturnFromNextStep: false, 
-  selectedSectors: []       
-  otherSector: ''    
+  aiPrioritiesIndex: number
+  aiPrioritiesReturnFromNextStep: boolean, 
+  selectedSectors: string[]       
+  otherSector: string    
 }
+
+const data = ref<SurveyData>({
+  aiPrioritiesIndex: 0,
+  aiPrioritiesReturnFromNextStep: false,
+  selectedSectors: [],
+  otherSector: '',
+})
 
 
 
@@ -156,7 +163,12 @@ export const useSurveyStore = defineStore('survey', () => {
 
   function resetSurvey() {
     currentStep.value = 0
-    data.value = {}
+    data.value = {
+      aiPrioritiesIndex: 0,
+    aiPrioritiesReturnFromNextStep: false,
+    selectedSectors: [],
+    otherSector: '',
+    }
     updateData('aiPrioritiesIndex', 0)
   }
 
