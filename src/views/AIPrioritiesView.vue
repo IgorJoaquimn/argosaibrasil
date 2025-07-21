@@ -231,6 +231,7 @@ onMounted(() => {
 
   pairs.value = generateRandomPairs(hopes, fears, 5)
   aiPriorities.value = Array(pairs.value.length).fill(null)
+  surveyStore.updateData('pairs', pairs.value)
 })
 </script>
 
