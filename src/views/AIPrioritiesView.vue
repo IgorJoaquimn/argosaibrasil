@@ -169,6 +169,7 @@ const disabledStyle = {
 
 function saveAnswer(value: string | null) {
   aiPriorities.value[currentIndex.value] = value
+  surveyStore.updateData('aiPriorities', aiPriorities.value)
   console.log('Resposta salva:', value, 'para índice', currentIndex.value)
 }
 
