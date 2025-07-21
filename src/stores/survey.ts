@@ -30,6 +30,7 @@ export interface SurveyData {
   otherSector: string
   desistiu?: boolean
   incompleto?: boolean
+  pairs?: (string | null | undefined)[]
 }
 
 
