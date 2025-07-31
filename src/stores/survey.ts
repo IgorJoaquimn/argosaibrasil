@@ -123,7 +123,7 @@ function updateArrayData(key: keyof SurveyData, newArray: any[]) {
 
   async function saveData() {
     try {
-      const fileName = `events/survey-${getOrCreateUserId()}.json`
+      const fileName = `events/ufam/survey-${getOrCreateUserId()}.json`
       const FUNCTION_URL = 'https://argosaibrasil-cf-649632774475.southamerica-east1.run.app/'
 
       // 1. Request signed URL from backend
