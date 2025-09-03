@@ -1,0 +1,151 @@
+
+    <!DOCTYPE html>
+    <html lang="pt">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Percepção sobre IA no Brasil - Relatório de Pesquisa</title>
+      <link rel="stylesheet" href="relatorio_ia.css">
+    </head>
+
+    <body>
+        <div class="container">
+            <div class ='header'>
+                <h1>🤖 Percepção sobre IA no Brasil</h1>
+                <p>Relatório Completo da Pesquisa - 2025</p>
+            </div>
+
+            <div class="content">
+                <div class="stats-highlight-total">
+                    <div class="stats-number-total">128</div>
+                    <div>Total de Respostas Coletadas</div>
+                    <div style="display: flex; justify-content: center; gap: 40px; margin-top: 15px; font-size: 0.9em;">
+                        <div>
+                            <div style="font-size: 1.8em; font-weight: bold;">120</div>
+                            <div>Questionários Completos</div>
+                        </div>
+
+                        <div>
+                            <div style="font-size: 1.8em; font-weight: bold;">8</div>
+                            <div>Questionários Incompletos</div>
+                        </div>
+                    </div>    
+                </div>
+
+                <!-- 1. Setores Mais Transformados -->
+                <div class="section">
+                    <div class="question-number">Pergunta 1</div>
+                    <h2 class="section-title">🏢 Setores Mais Transformados pela IA</h2>
+                    <div class="question-text">
+                        Na sua opinião, <strong>quais setores serão mais transformados pela IA no Brasil</strong> nos próximos 10 anos? (Marque de 1 a 3 opções)
+                    </div>
+                    <div class="chart-container"> <canvas id="sectorsChart"></canvas></div>
+                    <div class="missing-data">Não respondido: 0 participantes</div>
+                </div> <!-- fecha section -->
+
+                <!-- Preocupação e Otimismos -->
+                <div class="section">
+                    <div class="question-number">Pergunta 2</div>
+                    <h2 class="section-title">⚖️ Preocupações e Expectativas</h2>
+
+                    <!-- Escalas de Preocupação e Otimismo -->
+                    <div class="charts-row">
+                        <div class="chart-card">
+                            <div class="chart-question"> Em uma escala de 0 a 10, quanto você se <strong>sente preocupado(a)</strong> com os riscos da IA? </div>
+                            <canvas id="receiosHistogram"></canvas>   
+                        </div>
+
+                        <div class="chart-card">
+                            <div class="chart-question">Em uma escala de 0 a 10, quanto você se <strong>sente otimista</strong> sobre os benefícios da IA?</div>    
+                            <canvas id="otimismosHistogram"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="missing-data">Não respondido (Preocupações): 4 participantes </div>
+                    <div class="missing-data">Não respondido (Otimismo): 1 participantes</div>
+            
+                    <!-- O que preocupa -->
+                    <h3 style="color: #2c3e50; text-align: center; margin: 40px 0 20px 0;">O que mais te preocupa em relação à IA?</h3>
+                    <div class="sankey-container" id="sankeyContainerFears"></div>
+                    <div class="missing-data">Não respondido: 45 participantes</div>
+
+            
+
+                    <!-- O que deixa otimista -->
+                    <h3 style="color: #2c3e50; text-align: center; margin: 40px 0 20px 0;">O que mais te deixa otimista em relação à IA?</h3>
+                    <div class="sankey-container" id="sankeyContainerHopes"></div>
+                     <div class="missing-data">Não respondido: 48 participantes</div>
+
+                </div> <!-- fecha section -->
+
+
+                <!-- 3. Demografia -->
+                <div class="section">
+                    <div class="question-number">Pergunta 3</div>
+                    <h2 class="section-title">👥 Informações Demográficas</h2>
+            
+                    <div class="question-text">Qual é a sua faixa etária? Como você se identifica? Em que estado você reside? Qual a sua ocupação principal?</div>
+            
+                    <div class="demographics-grid" id="demographicsContainer">
+                        <!-- Cards demográficos serão gerados pelo JavaScript -->
+                    </div>
+
+                    <div class="missing-data">Não respondidos: Idade: 0 | Gênero: 1 | Estado: 1 | Profissão: 1 | Nenhum: 1 participantes</div>
+                </div>
+
+                <!-- 4. Direções Futuras do Brasil -->
+                <div class="section">
+                    <div class="question-number">Pergunta 4</div>
+                    <h2 class="section-title">🇧🇷 Direções Esperadas para o Brasil</h2>
+                    <div class="question-text">Em qual dessas direções você esperaria que o Brasil tivesse avançado no uso da IA daqui a 10 anos?<br><small>(5 pares de opções)</small></div>
+            
+                    <div class="future-directions-grid" id="futureDirectionsGrid">
+                    <!-- Cards das direções futuras serão gerados pelo JavaScript -->
+                    </div>
+
+                    <div class="hopes-fears-container">
+                        <div class="hopes-fears-box hopes-box">
+                            <h4>🌟 Top Otimismos</h4>
+                            <div id="otimismoTop10"></div>
+                        </div>
+                        <div class="hopes-fears-box fears-box">
+                            <h4>😰 Top Preocupações</h4>
+                            <div id="receioTop10"></div>
+                        </div>
+                    </div>
+
+                    <div class="missing-data">Não respondido: 0 participantes</div>
+                </div>
+
+                
+                <!-- 5. Definições de IA -->
+                <div class="section">
+                    <div class="question-number">Pergunta 5</div>
+                    <h2 class="section-title">💭 "O que é IA?" - Respostas Categorizadas</h2>
+                    <div class="question-text">
+                        Para terminar, imagine que alguém da sua família pergunta: "O que é essa tal de inteligência artificial?"
+                    </div>
+                    
+                    <div class="definitions-grid" id="definitionsGrid">
+                        <!-- Cards serão gerados pelo JavaScript -->
+                    </div>
+                    
+                    <div class="missing-data">Não respondido: 56 participantes</div>
+                </div>
+         
+            </div> <!-- fecha content -->
+
+    </div> <!-- fecha div container -->
+       
+    <!-- Scripts --> 
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="sankey_data.js"></script>
+    <script src="relatorio_ia.js"></script>
+
+    
+           
+    </body>
+    </html>
+    
