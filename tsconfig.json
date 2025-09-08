@@ -5,6 +5,11 @@
   "compilerOptions": {
     "composite": true,
     "baseUrl": ".",
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": false,
+    "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "paths": {
       "@/*": ["./src/*"]
     }
