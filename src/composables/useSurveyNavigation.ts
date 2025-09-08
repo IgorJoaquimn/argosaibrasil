@@ -1,12 +1,15 @@
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
+import { useEventNavigation } from '@/composables/useEventNavigation'
 
 export function useSurveyNavigation() {
   const router = useRouter()
+  const route = useRoute()
   const surveyStore = useSurveyStore()
+  const { getCurrentEventContext, navigateToPage } = useEventNavigation()
 
-  // Route mapping based on the survey steps
+  // Route mapping based on the survey steps (without event context)
   const routeMap: Record<string, { next?: string; previous?: string }> = {
     '/consent': { next: '/context' },
     '/context': { next: '/receioesperanca', previous: '/consent' },
@@ -20,14 +23,20 @@ export function useSurveyNavigation() {
     '/completed': { previous: '/describe-ai' }
   }
 
-  const currentRoute = computed(() => router.currentRoute.value.path)
+  // Get the current route without the event context for mapping
+  const getCurrentRoutePath = () => {
+    const eventContext = getCurrentEventContext()
+    return route.path.replace(`/${eventContext}`, '')
+  }
+
+  const currentRoute = computed(() => getCurrentRoutePath())
   const currentRouteConfig = computed(() => routeMap[currentRoute.value] || {})
 
   function goBack() {
     const previousRoute = currentRouteConfig.value.previous
     if (previousRoute) {
       surveyStore.previousStep()
-      router.push(previousRoute)
+      navigateToPage(previousRoute)
     }
   }
 
@@ -35,18 +44,18 @@ export function useSurveyNavigation() {
     const nextRoute = currentRouteConfig.value.next
     if (nextRoute) {
       surveyStore.nextStep()
-      router.push(nextRoute)
+      navigateToPage(nextRoute)
     }
   }
 
   // Generic function to navigate to a specific route with store sync
-  function navigateTo(route: string, updateStore: 'next' | 'previous' | 'none' = 'none') {
+  function navigateTo(routePath: string, updateStore: 'next' | 'previous' | 'none' = 'none') {
     if (updateStore === 'next') {
       surveyStore.nextStep()
     } else if (updateStore === 'previous') {
       surveyStore.previousStep()
     }
-    router.push(route)
+    navigateToPage(routePath)
   }
 
   const canGoBack = computed(() => !!currentRouteConfig.value.previous)

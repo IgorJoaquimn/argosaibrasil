@@ -40,6 +40,8 @@ export interface SurveyData {
       totalTimeSpent?: number // in milliseconds
     }
   }
+  // Event context for determining save location
+  eventContext?: string
 }
 
 
@@ -52,7 +54,8 @@ export const useSurveyStore = defineStore('survey', () => {
       aiPrioritiesReturnFromNextStep: false,
       selectedSectors: [],
       otherSector: '',
-      pageTimestamps: {}
+      pageTimestamps: {},
+      eventContext: 'test' // default value
     })
 
   const steps = [
@@ -158,6 +161,15 @@ function updateArrayData(key: keyof SurveyData, newArray: any[]) {
     
     return timeSpent
   }
+  
+  function setEventContext(eventContext: string) {
+    data.value.eventContext = eventContext
+    console.log(`🎯 Event context set to: ${eventContext}`)
+  }
+  
+  function getEventContext(): string {
+    return data.value.eventContext || 'test'
+  }
 
   function generateUniqueId(): string {
     const timestamp = Date.now().toString(36)              // Base36 timestamp
@@ -178,8 +190,11 @@ function updateArrayData(key: keyof SurveyData, newArray: any[]) {
 
   async function saveData() {
     try {
-      const fileName = `events/ufam/survey-${getOrCreateUserId()}.json`
+      const eventContext = getEventContext()
+      const fileName = `events/${eventContext}/survey-${getOrCreateUserId()}.json`
       const FUNCTION_URL = 'https://argosaibrasil-cf-649632774475.southamerica-east1.run.app/'
+
+      console.log(`💾 Saving data to: ${fileName}`)
 
       // 1. Request signed URL from backend
       const response = await fetch(FUNCTION_URL, {
@@ -221,15 +236,16 @@ function updateArrayData(key: keyof SurveyData, newArray: any[]) {
   }
 
   function resetSurvey() {
+    const currentEventContext = getEventContext() // Preserve the event context
     currentStep.value = 0
     data.value = {
       aiPrioritiesIndex: 0,
-    aiPrioritiesReturnFromNextStep: false,
-    selectedSectors: [],
-    otherSector: '',
-    pageTimestamps: {}
+      aiPrioritiesReturnFromNextStep: false,
+      selectedSectors: [],
+      otherSector: '',
+      pageTimestamps: {},
+      eventContext: currentEventContext // Restore the event context
     }
-    
   }
 
   async function abandonSurvey() {
@@ -271,6 +287,8 @@ function updateArrayData(key: keyof SurveyData, newArray: any[]) {
     trackPageVisit,
     getPageVisitInfo,
     calculateTimeSpent,
+    setEventContext,
+    getEventContext,
     saveData,
     resetSurvey,
     abandonSurvey,
