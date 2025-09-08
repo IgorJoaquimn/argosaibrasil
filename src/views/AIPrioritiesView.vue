@@ -93,40 +93,18 @@
 import { ref, computed, onMounted } from 'vue'
 import { useSurveyStore } from '@/stores/survey'
 import { useRouter } from 'vue-router'
+import { generateRandomPairs } from '@/utils/pairGenerator'
 import hopesText from '@/assets/hopes.txt?raw'
 import fearsText from '@/assets/fears.txt?raw'
 
 const surveyStore = useSurveyStore()
 const router = useRouter()
 
-
 function navigateNext() {
   router.push('/describe-ai') // substitua pela rota correta
 }
 
-// Tipo e função para gerar pares (adapte conforme seu generateRandomPairs)
-interface Option {
-  label: string
-  value: string
-}
-interface OptionPair {
-  optionA: Option
-  optionB: Option
-}
-function generateRandomPairs(hopes: string[], fears: string[], count: number): OptionPair[] {
-  // Aqui uso valores simples para label e value iguais
-  const pairs: OptionPair[] = []
-  const totalHopes = hopes.length
-  const totalFears = fears.length
-  for (let i = 0; i < count; i++) {
-    const optionA: Option = { label: hopes[i % totalHopes], value: hopes[i % totalHopes] }
-    const optionB: Option = { label: fears[i % totalFears], value: fears[i % totalFears] }
-    pairs.push({ optionA, optionB })
-  }
-  return pairs
-}
-
-const pairs = ref<OptionPair[]>([])
+const pairs = ref<any[]>([])
 const currentIndex = ref(0)
 
 // Guarda respostas localmente
@@ -139,7 +117,7 @@ const currentAnswered = computed(() => {
 })
 const allAnswered = computed(() => {
   if (pairs.value.length === 0) return false
-  return aiPriorities.value.length === pairs.value.length && aiPriorities.value.every(a => a !== null && a !== undefined)
+  return aiPriorities.value.length === pairs.value.length && aiPriorities.value.every((a: any) => a !== null && a !== undefined)
 })
 const currentPending = computed(() => {
   return aiPriorities.value[currentIndex.value] === null || aiPriorities.value[currentIndex.value] === undefined
