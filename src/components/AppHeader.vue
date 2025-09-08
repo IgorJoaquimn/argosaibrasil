@@ -7,8 +7,7 @@
          
           <img alt="Argos IA Brasil" src="@/assets/logo_argos.png" class="w-12 h-12 xs:w-16 xs:h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-25 lg:h-25 object-contain flex-shrink-0" />
         <h1 class="flex-1 text-xl sm:text-3xl lg:text-3xl font-semibold text-primary-500 break-words">
-
-          Argos IA Brasil
+          {{ headerTitle }}
           </h1>
         </div>
         <!-- Navigation Section (Right) -->
@@ -80,15 +79,29 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
+import { useEventNavigation } from '@/composables/useEventNavigation'
 
 const router = useRouter()
 const surveyStore = useSurveyStore()
+const { getCurrentEventContext } = useEventNavigation()
 
 const showAbandonDialog = ref(false)
 const showFinishDialog = ref(false)
+
+// Compute the header title based on event context
+const headerTitle = computed(() => {
+  const eventContext = getCurrentEventContext()
+  
+  switch (eventContext) {
+    case 'test':
+      return 'Argos IA Brasil (Rodando em teste)'
+    default:
+      return 'Argos IA Brasil'
+  }
+})
 
 function handleAbandon() {
   showAbandonDialog.value = true
