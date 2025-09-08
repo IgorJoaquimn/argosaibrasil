@@ -1,48 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-
-export interface SurveyData {
-  consentTerms?: boolean
-  selectedContext?: string
-  impactSector?: string
-  receiosEesperancas?: {
-    receios?: string
-    esperancas?: string
-    fearScale?: number
-    hopeScale?: number
-  }
-  aiDescription?: string
-  demographics?: {
-    age?: string
-    gender?: string
-    customGender?: string  
-    state?: string
-    occupation?: string
-    profession?: string         
-    otherProfession?: string   
-
-  }
-
-  aiPriorities?: (string | null | undefined)[]
-  aiPrioritiesIndex: number
-  aiPrioritiesReturnFromNextStep: boolean, 
-  selectedSectors: string[]       
-  otherSector: string
-  desistiu?: boolean
-  incompleto?: boolean
-  pairs?: (string | null | undefined)[]
-  // Timestamp tracking for page visits
-  pageTimestamps?: {
-    [pageName: string]: {
-      firstVisit: string
-      lastVisit: string
-      visitCount: number
-      totalTimeSpent?: number // in milliseconds
-    }
-  }
-  // Event context for determining save location
-  eventContext?: string
-}
+import type { SurveyData } from '@/types'
 
 
 

@@ -66,6 +66,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { useSurveyStore } from '@/stores/survey'
 import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
+import { CONTEXTS } from '@/constants/survey'
 
 const surveyStore = useSurveyStore()
 const { goBack, proceed: navigateNext } = useSurveyNavigation()
@@ -107,20 +108,7 @@ watch(otherText, (newVal) => {
 }, { flush: 'sync' })
 
 
-const contexts = [
-  { value: 'economia', title: 'Economia' },
-  { value: 'educacao', title: 'Educação' },
-  { value: 'saude', title: 'Saúde' },
-  { value: 'ciencia', title: 'Avanços científicos' },
-  { value: 'politica', title: 'Política' },
-  { value: 'entretenimento', title: 'Entretenimento'},
-  { value: 'agricultura', title: 'Agricultura' },
-  { value: 'meio_ambiente', title: 'Meio ambiente' },
-  { value: 'justica', title: 'Justiça e segurança pública' },
-  { value: 'transporte', title: 'Transporte e mobilidade' },
-  { value: 'direitos', title: 'Direitos humanos e aspectos sociais' },
-  { value: 'outros', title: 'Outros' }
-]
+const contexts = CONTEXTS
 
 //const safeSelectedContexts = computed(() => 
   //Array.isArray(selectedContexts.value) ? selectedContexts.value : []

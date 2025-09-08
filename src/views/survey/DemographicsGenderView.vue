@@ -63,6 +63,7 @@
 import { reactive, computed, onMounted } from 'vue'
 import { useSurveyStore } from '@/stores/survey'
 import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
+import { GENDER_OPTIONS } from '@/constants/survey'
 
 const surveyStore = useSurveyStore()
 const { goBack, proceed: navigateNext } = useSurveyNavigation()
@@ -72,14 +73,7 @@ const demographics = reactive({
   customGender: ''
 })
 
-const genderOptions = [
-  { value: 'masculino', label: 'Masculino' },
-  { value: 'feminino', label: 'Feminino' },
-  { value: 'transgenero', label: 'Transgênero' },
-  { value: 'nao-binario', label: 'Não binário' },
-  { value: 'nao-informar', label: 'Prefiro não informar' },
-  { value: 'outro', label: 'Prefiro descrever de outra forma' }
-]
+const genderOptions = GENDER_OPTIONS
 
 const canProceed = computed(() => {
   return demographics.gender !== '' && (

@@ -52,6 +52,7 @@
 import { reactive, computed, onMounted } from 'vue'
 import { useSurveyStore } from '@/stores/survey'
 import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
+import { AGE_OPTIONS } from '@/constants/survey'
 
 const surveyStore = useSurveyStore()
 const { goBack, proceed: navigateNext } = useSurveyNavigation()
@@ -62,16 +63,7 @@ const demographics = reactive({
 
 const canProceed = computed(() => demographics.age !== '')
 
-const ageOptions = [
-  { value: '18-', label: 'Abaixo de 18 anos' },
-  { value: '18-24', label: '18-24 anos' },
-  { value: '25-34', label: '25-34 anos' },
-  { value: '35-44', label: '35-44 anos' },
-  { value: '45-54', label: '45-54 anos' },
-  { value: '55-64', label: '55-64 anos' },
-  { value: '65+', label: '65+ anos' },
-  { value: 'nao-informar', label: 'Prefiro não informar' }
-]
+const ageOptions = AGE_OPTIONS
 
 onMounted(() => {
   const saved = surveyStore.data.demographics

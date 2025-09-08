@@ -47,6 +47,7 @@
 import { reactive, computed, onMounted } from 'vue'
 import { useSurveyStore } from '@/stores/survey'
 import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
+import { BRAZILIAN_STATES } from '@/constants/survey'
 
 const surveyStore = useSurveyStore()
 const { goBack, proceed: navigateNext } = useSurveyNavigation()
@@ -55,36 +56,7 @@ const demographics = reactive({
   state: ''
 })
 
-const estados = [
-  { value: 'AC', label: 'Acre' },
-  { value: 'AL', label: 'Alagoas' },
-  { value: 'AP', label: 'Amapá' },
-  { value: 'AM', label: 'Amazonas' },
-  { value: 'BA', label: 'Bahia' },
-  { value: 'CE', label: 'Ceará' },
-  { value: 'DF', label: 'Distrito Federal' },
-  { value: 'ES', label: 'Espírito Santo' },
-  { value: 'GO', label: 'Goiás' },
-  { value: 'MA', label: 'Maranhão' },
-  { value: 'MT', label: 'Mato Grosso' },
-  { value: 'MS', label: 'Mato Grosso do Sul' },
-  { value: 'MG', label: 'Minas Gerais' },
-  { value: 'PA', label: 'Pará' },
-  { value: 'PB', label: 'Paraíba' },
-  { value: 'PR', label: 'Paraná' },
-  { value: 'PE', label: 'Pernambuco' },
-  { value: 'PI', label: 'Piauí' },
-  { value: 'RJ', label: 'Rio de Janeiro' },
-  { value: 'RN', label: 'Rio Grande do Norte' },
-  { value: 'RS', label: 'Rio Grande do Sul' },
-  { value: 'RO', label: 'Rondônia' },
-  { value: 'RR', label: 'Roraima' },
-  { value: 'SC', label: 'Santa Catarina' },
-  { value: 'SP', label: 'São Paulo' },
-  { value: 'SE', label: 'Sergipe' },
-  { value: 'TO', label: 'Tocantins' },
-  { value: 'nao-informar', label: 'Prefiro não informar' }
-]
+const estados = BRAZILIAN_STATES
 
 const canProceed = computed(() => demographics.state !== '')
 

@@ -53,6 +53,7 @@
 import { reactive, computed, onMounted } from 'vue'
 import { useSurveyStore } from '@/stores/survey'
 import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
+import { OCCUPATION_CATEGORIES } from '@/constants/survey'
 
 const surveyStore = useSurveyStore()
 const { goBack, proceed: navigateNext } = useSurveyNavigation()
@@ -62,15 +63,7 @@ const demographics = reactive({
   otherProfession: ''
 })
 
-const professionOptions = [
-  { value: 'graduacao', label: 'Estudante de graduação' },
-  { value: 'posgraduacao', label: 'Estudante de pós-graduação' },
-  { value: 'docente', label: 'Docente' },
-  { value: 'pesquisador', label: 'Pesquisador(a)' },
-  { value: 'tecnico_cientifico', label: 'Profissional técnico/científico' },
-  { value: 'outro', label: 'Outro' },
-  { value: 'nao_informar', label: 'Prefiro não informar' }
-]
+const professionOptions = OCCUPATION_CATEGORIES
 
 const canProceed = computed(() => {
   if (demographics.profession === 'outro') {

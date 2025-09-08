@@ -29,67 +29,49 @@
     </div>
   </header>
 
-  <!-- Confirmation Dialog for Abandon -->
-  <div v-if="showAbandonDialog" class="fixed inset-0 blur-overlay flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-6 max-w-md mx-4">
-      <h3 class="text-lg font-semibold text-gray-900 mb-4">Confirmar Desistência</h3>
-      <p class="text-gray-600 mb-6">
-        Tem certeza que deseja desistir da pesquisa? Todos os seus dados serão apagados.
-      </p>
-      <div class="flex gap-3 justify-end">
-        <button
-          @click="showAbandonDialog = false"
-          class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors duration-200"
-        >
-          Cancelar
-        </button>
-        <button
-          @click="confirmAbandon"
-          class="px-4 py-2 text-sm font-medium text-white bg-red-100 border border-red-200 rounded-lg hover:bg-red-200 transition-colors duration-200"
-        >
-          Sim, desistir
-        </button>
-      </div>
-    </div>
-  </div>
+  <!-- Confirmation Dialogs -->
+  <ConfirmationDialog
+    :show="abandonDialog.show"
+    :title="abandonDialog.title"
+    :message="abandonDialog.message"
+    :confirm-text="abandonDialog.confirmText"
+    :cancel-text="abandonDialog.cancelText"
+    :type="abandonDialog.type"
+    @confirm="confirmAbandon"
+    @cancel="hideAbandon"
+  />
 
-  <!-- Confirmation Dialog for Finish -->
-  <div v-if="showFinishDialog" class="fixed inset-0 blur-overlay flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-6 max-w-md mx-4">
-      <h3 class="text-lg font-semibold text-gray-900 mb-4">Finalizar Pesquisa</h3>
-      <p class="text-gray-600 mb-6">
-        Tem certeza que deseja finalizar a pesquisa agora? Seus dados atuais serão salvos como incompletos.
-      </p>
-      <div class="flex gap-3 justify-end">
-        <button
-          @click="showFinishDialog = false"
-          class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 transition-colors duration-200"
-        >
-          Cancelar
-        </button>
-        <button
-          @click="confirmFinish"
-          class="px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-primary-600 rounded-lg hover:bg-primary-700 transition-colors duration-200"
-        >
-          Sim, finalizar
-        </button>
-      </div>
-    </div>
-  </div>
+  <ConfirmationDialog
+    :show="finishDialog.show"
+    :title="finishDialog.title"
+    :message="finishDialog.message"
+    :confirm-text="finishDialog.confirmText"
+    :cancel-text="finishDialog.cancelText"
+    :type="finishDialog.type"
+    @confirm="confirmFinish"
+    @cancel="hideFinish"
+  />
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
 import { useEventNavigation } from '@/composables/useEventNavigation'
+import { useDialog } from '@/composables/useDialog'
+import ConfirmationDialog from '@/components/ui/ConfirmationDialog.vue'
 
 const router = useRouter()
 const surveyStore = useSurveyStore()
 const { getCurrentEventContext } = useEventNavigation()
-
-const showAbandonDialog = ref(false)
-const showFinishDialog = ref(false)
+const { 
+  abandonDialog, 
+  finishDialog, 
+  showAbandon, 
+  showFinish, 
+  hideAbandon, 
+  hideFinish 
+} = useDialog()
 
 // Compute the header title based on event context
 const headerTitle = computed(() => {
@@ -104,17 +86,17 @@ const headerTitle = computed(() => {
 })
 
 function handleAbandon() {
-  showAbandonDialog.value = true
+  showAbandon()
 }
 
 function handleFinish() {
-  showFinishDialog.value = true
+  showFinish()
 }
 
 async function confirmAbandon() {
   try {
     await surveyStore.abandonSurvey()
-    showAbandonDialog.value = false
+    hideAbandon()
     // Navigate to the initial consent page
     router.push('/completed')
   } catch (error) {
@@ -126,7 +108,7 @@ async function confirmAbandon() {
 async function confirmFinish() {
   try {
     await surveyStore.finishIncomplete()
-    showFinishDialog.value = false
+    hideFinish()
     // Navigate to the completed page
     router.push('/completed')
   } catch (error) {
@@ -136,9 +118,4 @@ async function confirmFinish() {
 }
 </script>
 
-<style scoped>
-.blur-overlay {
-  backdrop-filter: blur(4px);
-  background-color: rgba(0, 0, 0, 0.1);
-}
-</style>
+

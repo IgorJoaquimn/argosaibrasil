@@ -101,7 +101,6 @@
 import { ref, onMounted } from 'vue'
 import { useSurveyStore } from '@/stores/survey'
 import { useSurveyNavigation } from '@/composables/useSurveyNavigation'
-import AccordionItem from '@/components/AccordionItem.vue'
 
 const surveyStore = useSurveyStore()
 const { proceed: navigateNext } = useSurveyNavigation()
