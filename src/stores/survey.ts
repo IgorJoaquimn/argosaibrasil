@@ -31,6 +31,15 @@ export interface SurveyData {
   desistiu?: boolean
   incompleto?: boolean
   pairs?: (string | null | undefined)[]
+  // Timestamp tracking for page visits
+  pageTimestamps?: {
+    [pageName: string]: {
+      firstVisit: string
+      lastVisit: string
+      visitCount: number
+      totalTimeSpent?: number // in milliseconds
+    }
+  }
 }
 
 
@@ -43,6 +52,7 @@ export const useSurveyStore = defineStore('survey', () => {
       aiPrioritiesReturnFromNextStep: false,
       selectedSectors: [],
       otherSector: '',
+      pageTimestamps: {}
     })
 
   const steps = [
@@ -104,6 +114,50 @@ function updateArrayData(key: keyof SurveyData, newArray: any[]) {
   }
   ;(data.value as any)[key] = [...newArray]
 }
+
+  function trackPageVisit(pageName: string) {
+    const now = new Date().toISOString()
+    
+    if (!data.value.pageTimestamps) {
+      data.value.pageTimestamps = {}
+    }
+    
+    if (!data.value.pageTimestamps[pageName]) {
+      // First visit to this page
+      data.value.pageTimestamps[pageName] = {
+        firstVisit: now,
+        lastVisit: now,
+        visitCount: 1
+      }
+    } else {
+      // Update for subsequent visits
+      data.value.pageTimestamps[pageName].lastVisit = now
+      data.value.pageTimestamps[pageName].visitCount += 1
+    }
+    
+    console.log(`📊 Page visit tracked: ${pageName}`, data.value.pageTimestamps[pageName])
+  }
+  
+  function getPageVisitInfo(pageName: string) {
+    return data.value.pageTimestamps?.[pageName] || null
+  }
+  
+  function calculateTimeSpent(pageName: string, exitTime?: string) {
+    const pageInfo = data.value.pageTimestamps?.[pageName]
+    if (!pageInfo) return 0
+    
+    const startTime = new Date(pageInfo.lastVisit).getTime()
+    const endTime = exitTime ? new Date(exitTime).getTime() : Date.now()
+    const timeSpent = endTime - startTime
+    
+    // Update total time spent
+    if (!pageInfo.totalTimeSpent) {
+      pageInfo.totalTimeSpent = 0
+    }
+    pageInfo.totalTimeSpent += timeSpent
+    
+    return timeSpent
+  }
 
   function generateUniqueId(): string {
     const timestamp = Date.now().toString(36)              // Base36 timestamp
@@ -173,6 +227,7 @@ function updateArrayData(key: keyof SurveyData, newArray: any[]) {
     aiPrioritiesReturnFromNextStep: false,
     selectedSectors: [],
     otherSector: '',
+    pageTimestamps: {}
     }
     
   }
@@ -213,6 +268,9 @@ function updateArrayData(key: keyof SurveyData, newArray: any[]) {
     goToStep,
     updateData,
     updateArrayData,
+    trackPageVisit,
+    getPageVisitInfo,
+    calculateTimeSpent,
     saveData,
     resetSurvey,
     abandonSurvey,

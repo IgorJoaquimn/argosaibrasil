@@ -3,6 +3,7 @@ import type { Router } from 'vue-router'
 import { useSurveyStore } from '@/stores/survey'
 
 let isSetup = false
+let currentPageStartTime: string | null = null
 
 export function setupAutoSave(router: Router) {
   if (isSetup) return
@@ -17,12 +18,30 @@ export function setupAutoSave(router: Router) {
     }
   }
 
-  // Set up navigation guard to save data before each route change
+  // Set up navigation guard to save data and track page visits
   router.beforeEach(async (to, from, next) => {
+    // Track exit from previous page (calculate time spent)
+    if (from.name && currentPageStartTime) {
+      const exitTime = new Date().toISOString()
+      const pageName = from.name.toString()
+      surveyStore.calculateTimeSpent(pageName, exitTime)
+    }
+    
+    // Save data when navigating away from a page
     if (from.name && from.name !== to.name) {
       await saveData()
     }
+    
     next()
+  })
+  
+  // Track entry to new page
+  router.afterEach((to) => {
+    if (to.name) {
+      const pageName = to.name.toString()
+      surveyStore.trackPageVisit(pageName)
+      currentPageStartTime = new Date().toISOString()
+    }
   })
   
   isSetup = true
@@ -42,9 +61,24 @@ export function useAutoSave() {
       isSaving.value = false
     }
   }
+  
+  function trackPageVisit(pageName: string) {
+    surveyStore.trackPageVisit(pageName)
+  }
+  
+  function getPageVisitInfo(pageName: string) {
+    return surveyStore.getPageVisitInfo(pageName)
+  }
+  
+  function calculateTimeSpent(pageName: string, exitTime?: string) {
+    return surveyStore.calculateTimeSpent(pageName, exitTime)
+  }
 
   return {
     isSaving,
-    saveData
+    saveData,
+    trackPageVisit,
+    getPageVisitInfo,
+    calculateTimeSpent
   }
 }
