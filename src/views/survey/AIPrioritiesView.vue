@@ -92,13 +92,14 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useSurveyStore } from '@/stores/survey'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { generateRandomPairs } from '@/utils/pairGenerator'
 import hopesText from '@/assets/hopes.txt?raw'
 import fearsText from '@/assets/fears.txt?raw'
 
 const surveyStore = useSurveyStore()
 const router = useRouter()
+const route = useRoute()
 
 function navigateNext() {
   router.push('/describe-ai') // substitua pela rota correta
@@ -155,6 +156,7 @@ function selectOption(value: string) {
   saveAnswer(value)
   if (currentIndex.value < pairs.value.length - 1) {
     currentIndex.value++
+    surveyStore.updateData('aiPrioritiesIndex', currentIndex.value)
   }
 }
 
@@ -162,6 +164,7 @@ function skip() {
   saveAnswer('skipped')
   if (currentIndex.value < pairs.value.length - 1) {
     currentIndex.value++
+    surveyStore.updateData('aiPrioritiesIndex', currentIndex.value)
   }
 }
 
@@ -179,37 +182,53 @@ function proceed() {
 
 
 function goBack() {
-  const currentIdx = surveyStore.data.aiPrioritiesIndex ?? 0
-  console.log('goBack: aiPrioritiesIndex=', currentIdx)
-  
-  if (currentIdx > 0) {
-    const prevIdx = currentIdx - 1
-    surveyStore.updateData('aiPrioritiesIndex', prevIdx)
-    surveyStore.updateData('aiPrioritiesReturnFromNextStep', true)
-    router.push({ path: '/ai-priorities', query: { index: prevIdx } })
+  if (currentIndex.value > 0) {
+    // Go back to previous pair
+    currentIndex.value--
+    // Update store with current index
+    surveyStore.updateData('aiPrioritiesIndex', currentIndex.value)
   } else {
-    // Aqui navega para a página anterior do survey
-    // Exemplo fixo, altere conforme sua navegação real:
+    // Go to previous page in survey
     router.push('/demographics-occupation')
   }
 }
-
-//function goBack() {
-  //if (currentIndex.value > 0) {
-    //currentIndex.value--
-  //} else {
-    //alert('Ir para página anterior do survey') 
-    // Coloque aqui sua lógica de navegação para página anterior
- // }
-//}
 
 onMounted(() => {
   const hopes = hopesText.split('\n').map(line => line.trim()).filter(Boolean)
   const fears = fearsText.split('\n').map(line => line.trim()).filter(Boolean)
 
-  pairs.value = generateRandomPairs(hopes, fears, 5)
-  aiPriorities.value = Array(pairs.value.length).fill(null)
-  surveyStore.updateData('pairs', pairs.value)
+  // Generate pairs (check if they already exist in store first)
+  if (surveyStore.data.pairs && surveyStore.data.pairs.length > 0) {
+    pairs.value = surveyStore.data.pairs
+  } else {
+    const userId = surveyStore.getOrCreateUserId()
+    pairs.value = generateRandomPairs(hopes, fears, 5, userId)
+    surveyStore.updateData('pairs', pairs.value)
+  }
+
+  // Initialize answers array
+  if (surveyStore.data.aiPriorities && surveyStore.data.aiPriorities.length > 0) {
+    aiPriorities.value = surveyStore.data.aiPriorities.map((item: any) => item ?? null)
+  } else {
+    aiPriorities.value = Array(pairs.value.length).fill(null)
+  }
+
+  // Set current index from route query, store, or default to 0
+  const queryIndex = route.query.index ? parseInt(route.query.index as string) : null
+  const storeIndex = surveyStore.data.aiPrioritiesIndex ?? 0
+  
+  currentIndex.value = queryIndex !== null ? queryIndex : storeIndex
+  
+  // Ensure currentIndex is within valid bounds
+  if (currentIndex.value >= pairs.value.length) {
+    currentIndex.value = pairs.value.length - 1
+  }
+  if (currentIndex.value < 0) {
+    currentIndex.value = 0
+  }
+  
+  // Update store with current index
+  surveyStore.updateData('aiPrioritiesIndex', currentIndex.value)
 })
 </script>
 

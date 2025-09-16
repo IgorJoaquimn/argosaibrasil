@@ -8,15 +8,33 @@ export function slugify(text: string): string {
     .replace(/[^\w_]+/g, "")
 }
 
-export function generateRandomPairs(hopes: string[], fears: string[], numPairs = 5) {
+function hashString(str: string): number {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash // Convert to 32-bit integer
+  }
+  return Math.abs(hash)
+}
+
+export function generateRandomPairs(hopes: string[], fears: string[], numPairs = 5, userId?: string) {
   const allPairs = []
-  const shuffle = (arr: any[]) => arr.sort(() => Math.random() - 0.5)
+  
+  // Simple seeded random number generator
+  let seed = userId ? hashString(userId) : Math.random() * 1000000
+  const seededRandom = () => {
+    seed = (seed * 9301 + 49297) % 233280
+    return seed / 233280
+  }
+  
+  const shuffle = (arr: any[]) => arr.sort(() => seededRandom() - 0.5)
   hopes = shuffle([...hopes])
   fears = shuffle([...fears])
   const pairTypes = ['hope+fear', 'hope+hope', 'fear+fear']
 
   while (allPairs.length < numPairs) {
-    const type = pairTypes[Math.floor(Math.random() * pairTypes.length)]
+    const type = pairTypes[Math.floor(seededRandom() * pairTypes.length)]
 
     let optionA = null, optionB = null
     if (type === 'hope+fear' && hopes.length && fears.length) {

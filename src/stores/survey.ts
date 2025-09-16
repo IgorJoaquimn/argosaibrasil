@@ -247,6 +247,7 @@ function updateArrayData(key: keyof SurveyData, newArray: any[]) {
     calculateTimeSpent,
     setEventContext,
     getEventContext,
+    getOrCreateUserId,
     saveData,
     resetSurvey,
     abandonSurvey,
