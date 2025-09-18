@@ -3,14 +3,12 @@
 <template>
   <div class="max-w-3xl mx-auto">
     <div class="bg-white rounded-lg shadow-md p-8">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Preocupações e Expectativas</h2>
-
-  
-      
+      <h2 class="text-xl font-bold text-gray-900 mb-6 text-center">Preocupações e Expectativas</h2>
+ 
       <!-- Seus receios -->
       <section class="mb-10">
-        <h3 class="text-xl font-semibold text-gray-900 mb-2 text-left">Suas preocupações em relação à IA:</h3>
-        <label for="fear-scale" class="block mb-1 text-gray-700 text-left">
+        <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-2 text-left">Suas preocupações em relação à IA:</h3>
+        <label for="fear-scale" class="block mb-1 text-sm text-gray-700 text-left">
           Em uma escala de 0 a 10, quanto você se <span style="font-weight: 700;">sente preocupado(a) </span> com os riscos da IA?
         </label>
 
@@ -21,33 +19,35 @@
           <span>10</span>
         </div>
 
-  <div class="w-full mt-2 flex items-center justify-between text-sm text-gray-700">
-  <span class="text-left">Nenhuma preocupação</span>
-  <span class="text-lg font-bold text-blue-700 bg-gray-100 px-3 py-1 rounded shadow text-center">{{ fearScale }}</span>
-  <span class="text-right">Extremamente preocupado(a)</span>
-</div>
+        <div class="w-full mt-2 flex items-center justify-between text-sm text-gray-700">
+          <span class="text-left">Nenhuma preocupação</span>
+          <span class="text-base sm:text-lg font-bold text-blue-700 bg-gray-100 px-3 py-1 rounded shadow text-center">{{ fearScale }}</span>
+          <span class="text-right">Extremamente preocupado(a)</span>
+        </div>
+
+        <br>
+      <!-- Textos abaixo dos números -->
+      <label for="fear-Text" class="block mt-4 mb-1 text-sm text-gray-700 text-left">
+        O que mais te <span style="font-weight: 700;">preocupa</span> em relação à IA?
+      </label>
 
 
-<!-- Textos abaixo dos números -->
-      <label for="fear-Text" class="block mb-1 text-gray-700 text-left">
-         O que mais te <span style="font-weight: 700;">preocupa</span> em relação à IA?
-        </label>
 
-        <textarea
-          v-model="fearText"
-          @input="saveFears"
-          rows="4"
-          placeholder="O que mais te preocupa na IA?"
-          class="mt-4 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-        ></textarea>
+      <textarea
+        v-model="fearText"
+        @input="saveFears"
+        rows="2"
+        placeholder="O que mais te preocupa na IA?"
+        class="mt-3 w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y">
+      </textarea>
       </section>
 
    
       
       
-      <section>
-        <h3 class="text-xl font-semibold text-gray-900 mb-2 text-left">Suas esperanças em relação à IA:</h3>
-        <label for="hope-scale" class="block mb-1 text-gray-700 text-left">
+      <section class="mb-10">
+        <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-2 text-left">Suas esperanças em relação à IA:</h3>
+        <label for="hope-scale" class="block mb-1 text-sm text-gray-700 text-left">
           Em uma escala de 0 a 10, quanto você se <span style="font-weight: 700;">sente otimista</span> sobre os benefícios da IA?
         </label>
         <input 
@@ -66,7 +66,7 @@
 
         <div class="w-full mt-2 flex items-center justify-between text-sm text-gray-700">
           <span class="text-left">Nada otimista</span>
-          <span class="text-lg font-bold text-blue-700 bg-gray-100 px-3 py-1 rounded shadow text-center">{{ hopeScale }}</span>
+          <span class="text-base sm:text-lg font-bold text-blue-700 bg-gray-100 px-3 py-1 rounded shadow text-center">{{ hopeScale }}</span>
           <span class="text-right">Muito otimista</span>
         </div>
 
@@ -75,15 +75,17 @@
 
         <!-- Textos abaixo dos números -->
         
-        <label for="hopeText" class="block mb-1 text-gray-700 text-left">
+        <label for="hopeText" class="block mt-4 mb-1 text-sm text-gray-700 text-left">
           O que mais te deixa <span style="font-weight: 700;">otimista</span> em relação à IA?
         </label>
+
+
         <textarea
           v-model="hopeText"
           @input="saveHopes"
-          rows="4"
+          rows="2"
           placeholder="O que mais te dá esperança em relação à IA?"
-          class="mt-4 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+          class="mt-3 w-full text-sm px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"
         ></textarea>
       </section>
 
